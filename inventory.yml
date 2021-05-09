@@ -25,12 +25,12 @@ all:
                       hosts:
                         EMEA_NORTH_01_LEAF2A:
                         EMEA_NORTH_01_LEAF2B:
-        # TENANTS_NETWORKS:
-        #   children:
-        #     EMEA_NORTH_01_L3LEAFS:
-        # SERVERS:
-        #   children:
-        #     EMEA_NORTH_01_L3LEAFS:
+        TENANTS_NETWORKS:
+          children:
+            EMEA_NORTH_01_L3LEAFS:
+        SERVERS:
+          children:
+            EMEA_NORTH_01_L3LEAFS:
       vars:
         ansible_host: 10.83.28.162
         ansible_connection: httpapi

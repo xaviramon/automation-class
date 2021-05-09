@@ -26,6 +26,8 @@
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
+- [BFD](#bfd)
+  - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
@@ -224,9 +226,9 @@ vlan internal order ascending range 1006 1199
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
 | Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_LEAF1A_Ethernet2 | routed | - | 172.31.255.0/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_01_LEAF1B_Ethernet2 | routed | - | 172.31.255.4/31 | default | 1500 | false | - | - |
-| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2A_Ethernet2 | routed | - | 172.31.255.8/31 | default | 1500 | false | - | - |
-| Ethernet5 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2B_Ethernet2 | routed | - | 172.31.255.12/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_01_LEAF1B_Ethernet2 | routed | - | 172.31.255.8/31 | default | 1500 | false | - | - |
+| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2A_Ethernet2 | routed | - | 172.31.255.16/31 | default | 1500 | false | - | - |
+| Ethernet5 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2B_Ethernet2 | routed | - | 172.31.255.24/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -244,21 +246,21 @@ interface Ethernet3
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.255.4/31
+   ip address 172.31.255.8/31
 !
 interface Ethernet4
    description P2P_LINK_TO_EMEA_NORTH_01_LEAF2A_Ethernet2
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.255.8/31
+   ip address 172.31.255.16/31
 !
 interface Ethernet5
    description P2P_LINK_TO_EMEA_NORTH_01_LEAF2B_Ethernet2
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.255.12/31
+   ip address 172.31.255.24/31
 ```
 
 ## Loopback Interfaces
@@ -349,6 +351,18 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 ### Router BGP Peer Groups
 
+#### EVPN-OVERLAY-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | evpn |
+| Next-hop unchanged | True |
+| Source | Loopback0 |
+| Bfd | true |
+| Ebgp multihop | 3 |
+| Send community | all |
+| Maximum routes | 0 (no limit) |
+
 #### IPv4-UNDERLAY-PEERS
 
 | Settings | Value |
@@ -362,9 +376,13 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
 | 172.31.255.1 | 65101 | default |
-| 172.31.255.5 | 65101 | default |
-| 172.31.255.9 | 65102 | default |
-| 172.31.255.13 | 65102 | default |
+| 172.31.255.9 | 65101 | default |
+| 172.31.255.17 | 65102 | default |
+| 172.31.255.25 | 65102 | default |
+| 192.168.255.5 | 65101 | default |
+| 192.168.255.6 | 65101 | default |
+| 192.168.255.7 | 65102 | default |
+| 192.168.255.8 | 65102 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -383,6 +401,14 @@ router bgp 65100
    graceful-restart restart-time 300
    graceful-restart
    maximum-paths 4 ecmp 4
+   neighbor EVPN-OVERLAY-PEERS peer group
+   neighbor EVPN-OVERLAY-PEERS next-hop-unchanged
+   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
+   neighbor EVPN-OVERLAY-PEERS bfd
+   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
+   neighbor EVPN-OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==
+   neighbor EVPN-OVERLAY-PEERS send-community
+   neighbor EVPN-OVERLAY-PEERS maximum-routes 0
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
@@ -390,19 +416,53 @@ router bgp 65100
    neighbor 172.31.255.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.1 remote-as 65101
    neighbor 172.31.255.1 description EMEA_NORTH_01_LEAF1A_Ethernet2
-   neighbor 172.31.255.5 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.5 remote-as 65101
-   neighbor 172.31.255.5 description EMEA_NORTH_01_LEAF1B_Ethernet3
    neighbor 172.31.255.9 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.9 remote-as 65102
-   neighbor 172.31.255.9 description EMEA_NORTH_01_LEAF2A_Ethernet4
-   neighbor 172.31.255.13 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.13 remote-as 65102
-   neighbor 172.31.255.13 description EMEA_NORTH_01_LEAF2B_Ethernet5
+   neighbor 172.31.255.9 remote-as 65101
+   neighbor 172.31.255.9 description EMEA_NORTH_01_LEAF1B_Ethernet3
+   neighbor 172.31.255.17 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.17 remote-as 65102
+   neighbor 172.31.255.17 description EMEA_NORTH_01_LEAF2A_Ethernet4
+   neighbor 172.31.255.25 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.25 remote-as 65102
+   neighbor 172.31.255.25 description EMEA_NORTH_01_LEAF2B_Ethernet5
+   neighbor 192.168.255.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.5 remote-as 65101
+   neighbor 192.168.255.5 description EMEA_NORTH_01_LEAF1A
+   neighbor 192.168.255.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.6 remote-as 65101
+   neighbor 192.168.255.6 description EMEA_NORTH_01_LEAF1B
+   neighbor 192.168.255.7 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.7 remote-as 65102
+   neighbor 192.168.255.7 description EMEA_NORTH_01_LEAF2A
+   neighbor 192.168.255.8 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.8 remote-as 65102
+   neighbor 192.168.255.8 description EMEA_NORTH_01_LEAF2B
    redistribute connected route-map RM-CONN-2-BGP
    !
+   address-family evpn
+      neighbor EVPN-OVERLAY-PEERS activate
+   !
    address-family ipv4
+      no neighbor EVPN-OVERLAY-PEERS activate
       neighbor IPv4-UNDERLAY-PEERS activate
+```
+
+# BFD
+
+## Router BFD
+
+### Router BFD Multihop Summary
+
+| Interval | Minimum RX | Multiplier |
+| -------- | ---------- | ---------- |
+| 1200 | 1200 | 3 |
+
+### Router BFD Multihop Device Configuration
+
+```eos
+!
+router bfd
+   multihop interval 1200 min-rx 1200 multiplier 3
 ```
 
 # Multicast

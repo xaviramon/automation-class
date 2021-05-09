@@ -17,7 +17,7 @@ overlay_loopback_network_summary: 192.168.255.0/24
 # VTEP VXLAN Tunnel source loopback IP for leaf switches, assigned in /32s
 # Assign range larger then total leaf switches
 vtep_loopback_network_summary: 192.168.254.0/24
-vtep_vvtep_ip: 192.168.123.123/32
+# vtep_vvtep_ip: 192.168.123.123/32
 
 # mlag pair IP assignment - assign blocks - Assign range larger then
 # total leafs switches
@@ -25,6 +25,7 @@ mlag_ips:
   leaf_peer_l3: 10.255.254.0/24
   mlag_peer: 10.255.252.0/24
 
+max_spines: 4
 
 
 # Enable vlan aware bundles
@@ -41,12 +42,12 @@ spine:
     EMEA_NORTH_01_SPINE1:
       id: 1
       mgmt_ip: 192.168.0.10/24
-      evpn_role: none
+      evpn_role: server
       # super_spine_interfaces: [ Ethernet1, Ethernet1 ]
     EMEA_NORTH_01_SPINE2:
       id: 2
       mgmt_ip: 192.168.0.11/24
-      evpn_role: none
+      evpn_role: server
       # super_spine_interfaces: [ Ethernet2, Ethernet2 ]
 
 
@@ -63,15 +64,16 @@ l3leaf:
     #bgp_as: 65100
     spines: [EMEA_NORTH_01_SPINE1, EMEA_NORTH_01_SPINE2]
     uplink_to_spine_interfaces: [Ethernet2, Ethernet3]
+    mlag: true
     mlag_interfaces: [Ethernet1, Ethernet6]
     spanning_tree_priority: 4096
     spanning_tree_mode: mstp
+    evpn_role: client
   node_groups:
     EMEA_NORTH_01_LEAF1:
       bgp_as: 65101
       filter:
-        tenants:
-          - Tenant_A
+        tenants: [Tenant_A]
       nodes:
         EMEA_NORTH_01_LEAF1A:
           id: 1
@@ -83,7 +85,6 @@ l3leaf:
           spine_interfaces: [Ethernet3, Ethernet3]
     EMEA_NORTH_01_LEAF2:
       bgp_as: 65102
-      evpn_services_l2_only: true
       nodes:
         EMEA_NORTH_01_LEAF2A:
           id: 3
@@ -114,4 +115,3 @@ leaf_bgp_defaults:
   - distance bgp 20 200 200
   - graceful-restart restart-time 300
   - graceful-restart
-
