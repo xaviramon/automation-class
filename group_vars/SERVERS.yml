@@ -14,3 +14,5 @@ servers:
         switch_ports: [ Ethernet4, Ethernet4 ]
         switches: [ EMEA_NORTH_01_LEAF1A,EMEA_NORTH_01_LEAF1B ]
         profile: TENANT_A_ALL
+        port_channel:
+          mode: active

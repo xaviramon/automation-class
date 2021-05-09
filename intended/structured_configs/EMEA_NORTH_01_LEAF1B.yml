@@ -505,6 +505,13 @@ port_channel_interfaces:
     trunk_groups:
     - LEAF_PEER_L3
     - MLAG
+  Port-Channel4:
+    description: TENANT_A_SRV1_
+    type: switched
+    shutdown: false
+    mode: trunk
+    vlans: 110-119,120-130,160-161
+    mlag: 4
 ethernet_interfaces:
   Ethernet1:
     peer: EMEA_NORTH_01_LEAF1A
@@ -553,6 +560,9 @@ ethernet_interfaces:
     shutdown: false
     mode: trunk
     vlans: 110-119,120-130,160-161
+    channel_group:
+      id: 4
+      mode: active
     profile: TENANT_A_ALL
 mlag_configuration:
   domain_id: EMEA_NORTH_01_LEAF1

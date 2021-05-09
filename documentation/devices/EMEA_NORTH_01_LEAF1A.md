@@ -356,7 +356,7 @@ vlan 4094
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet1 | MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet1 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
-| Ethernet4 |  TENANT_A_SRV1_Eth1 | trunk | 110-119,120-130,160-161 | - | - | - |
+| Ethernet4 | TENANT_A_SRV1_Eth1 | *trunk | *110-119,120-130,160-161 | *- | *- | 4 |
 | Ethernet6 | MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
 
 *Inherited from Port-Channel Interface
@@ -394,9 +394,7 @@ interface Ethernet3
 interface Ethernet4
    description TENANT_A_SRV1_Eth1
    no shutdown
-   switchport
-   switchport trunk allowed vlan 110-119,120-130,160-161
-   switchport mode trunk
+   channel-group 4 mode active
 !
 interface Ethernet6
    description MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet6
@@ -413,6 +411,7 @@ interface Ethernet6
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_PEER_EMEA_NORTH_01_LEAF1B_Po1 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
+| Port-Channel4 | TENANT_A_SRV1_ | switched | trunk | 110-119,120-130,160-161 | - | - | - | - | 4 | - |
 
 ### Port-Channel Interfaces Device Configuration
 
@@ -426,6 +425,14 @@ interface Port-Channel1
    switchport mode trunk
    switchport trunk group LEAF_PEER_L3
    switchport trunk group MLAG
+!
+interface Port-Channel4
+   description TENANT_A_SRV1_
+   no shutdown
+   switchport
+   switchport trunk allowed vlan 110-119,120-130,160-161
+   switchport mode trunk
+   mlag 4
 ```
 
 ## Loopback Interfaces
