@@ -43,12 +43,10 @@ spine:
       id: 1
       mgmt_ip: 192.168.0.10/24
       evpn_role: server
-      # super_spine_interfaces: [ Ethernet1, Ethernet1 ]
     EMEA_NORTH_01_SPINE2:
       id: 2
       mgmt_ip: 192.168.0.11/24
       evpn_role: server
-      # super_spine_interfaces: [ Ethernet2, Ethernet2 ]
 
 
 # Leaf switch groups

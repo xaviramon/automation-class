@@ -4,11 +4,6 @@ all:
       children:
         EMEA_NORTH:
           children:
-            # EMEADC_NORTH_POD1
-            # EMEA_NORTH_01_SUPERSPINES:
-            #   hosts:
-            #     EMEA_NORTH_01_SUPERSPINE1:
-            #     EMEA_NORTH_01_SUPERSPINE2:
             EMEA_NORTH_01:
               children:
                 EMEA_NORTH_01_SPINES:

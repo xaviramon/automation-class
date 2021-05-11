@@ -55,20 +55,20 @@
 
 | P2P Summary | Available Addresses | Assigned addresses | Assigned Address % |
 | ----------- | ------------------- | ------------------ | ------------------ |
-| 172.31.250.0/24 | 256 | 16 | 6.25 % |
+| 172.31.255.0/24 | 256 | 16 | 6.25 % |
 
 ## Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| EMEA_NORTH_01_LEAF1A | Ethernet2 | 172.31.250.1/31 | EMEA_NORTH_01_SPINE1 | Ethernet2 | 172.31.250.0/31 |
-| EMEA_NORTH_01_LEAF1A | Ethernet3 | 172.31.250.3/31 | EMEA_NORTH_01_SPINE2 | Ethernet2 | 172.31.250.2/31 |
-| EMEA_NORTH_01_LEAF1B | Ethernet2 | 172.31.250.9/31 | EMEA_NORTH_01_SPINE1 | Ethernet3 | 172.31.250.8/31 |
-| EMEA_NORTH_01_LEAF1B | Ethernet3 | 172.31.250.11/31 | EMEA_NORTH_01_SPINE2 | Ethernet3 | 172.31.250.10/31 |
-| EMEA_NORTH_01_LEAF2A | Ethernet2 | 172.31.250.17/31 | EMEA_NORTH_01_SPINE1 | Ethernet4 | 172.31.250.16/31 |
-| EMEA_NORTH_01_LEAF2A | Ethernet3 | 172.31.250.19/31 | EMEA_NORTH_01_SPINE2 | Ethernet4 | 172.31.250.18/31 |
-| EMEA_NORTH_01_LEAF2B | Ethernet2 | 172.31.250.25/31 | EMEA_NORTH_01_SPINE1 | Ethernet5 | 172.31.250.24/31 |
-| EMEA_NORTH_01_LEAF2B | Ethernet3 | 172.31.250.27/31 | EMEA_NORTH_01_SPINE2 | Ethernet5 | 172.31.250.26/31 |
+| EMEA_NORTH_01_LEAF1A | Ethernet2 | 172.31.255.1/31 | EMEA_NORTH_01_SPINE1 | Ethernet2 | 172.31.255.0/31 |
+| EMEA_NORTH_01_LEAF1A | Ethernet3 | 172.31.255.3/31 | EMEA_NORTH_01_SPINE2 | Ethernet2 | 172.31.255.2/31 |
+| EMEA_NORTH_01_LEAF1B | Ethernet2 | 172.31.255.9/31 | EMEA_NORTH_01_SPINE1 | Ethernet3 | 172.31.255.8/31 |
+| EMEA_NORTH_01_LEAF1B | Ethernet3 | 172.31.255.11/31 | EMEA_NORTH_01_SPINE2 | Ethernet3 | 172.31.255.10/31 |
+| EMEA_NORTH_01_LEAF2A | Ethernet2 | 172.31.255.17/31 | EMEA_NORTH_01_SPINE1 | Ethernet4 | 172.31.255.16/31 |
+| EMEA_NORTH_01_LEAF2A | Ethernet3 | 172.31.255.19/31 | EMEA_NORTH_01_SPINE2 | Ethernet4 | 172.31.255.18/31 |
+| EMEA_NORTH_01_LEAF2B | Ethernet2 | 172.31.255.25/31 | EMEA_NORTH_01_SPINE1 | Ethernet5 | 172.31.255.24/31 |
+| EMEA_NORTH_01_LEAF2B | Ethernet3 | 172.31.255.27/31 | EMEA_NORTH_01_SPINE2 | Ethernet5 | 172.31.255.26/31 |
 
 ## Overlay Loopback Interfaces (BGP EVPN Peering)
 
