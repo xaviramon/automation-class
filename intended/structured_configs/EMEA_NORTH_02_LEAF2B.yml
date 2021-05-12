@@ -605,6 +605,13 @@ port_channel_interfaces:
     trunk_groups:
     - LEAF_PEER_L3
     - MLAG
+  Port-Channel5:
+    description: TENANT_B_SRV1_POD2_Not so important server
+    type: switched
+    shutdown: false
+    mode: trunk
+    vlans: 200-299
+    mlag: 5
 ethernet_interfaces:
   Ethernet12:
     peer: EMEA_NORTH_02_LEAF2A
@@ -644,6 +651,19 @@ ethernet_interfaces:
     type: routed
     shutdown: false
     ip_address: 172.31.155.27/31
+  Ethernet5:
+    peer: TENANT_B_SRV1_POD2
+    peer_interface: Eth2
+    peer_type: server
+    description: TENANT_B_SRV1_POD2_Eth2
+    type: switched
+    shutdown: false
+    mode: trunk
+    vlans: 200-299
+    channel_group:
+      id: 5
+      mode: active
+    profile: TENANT_B_ALL
 mlag_configuration:
   domain_id: EMEA_NORTH_02_LEAF2
   local_interface: Vlan4094

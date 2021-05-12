@@ -372,6 +372,7 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
+| Ethernet5 | TENANT_B_SRV1_POD2_Eth1 | *trunk | *200-299 | *- | *- | 5 |
 | Ethernet12 | MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet12 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
 | Ethernet13 | MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet13 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
 
@@ -402,6 +403,11 @@ interface Ethernet3
    no switchport
    ip address 172.31.155.19/31
 !
+interface Ethernet5
+   description TENANT_B_SRV1_POD2_Eth1
+   no shutdown
+   channel-group 5 mode active
+!
 interface Ethernet12
    description MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet12
    no shutdown
@@ -421,11 +427,20 @@ interface Ethernet13
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
+| Port-Channel5 | TENANT_B_SRV1_POD2_Not so important server | switched | trunk | 200-299 | - | - | - | - | 5 | - |
 | Port-Channel12 | MLAG_PEER_EMEA_NORTH_02_LEAF2B_Po12 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 
 ### Port-Channel Interfaces Device Configuration
 
 ```eos
+!
+interface Port-Channel5
+   description TENANT_B_SRV1_POD2_Not so important server
+   no shutdown
+   switchport
+   switchport trunk allowed vlan 200-299
+   switchport mode trunk
+   mlag 5
 !
 interface Port-Channel12
    description MLAG_PEER_EMEA_NORTH_02_LEAF2B_Po12

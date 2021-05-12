@@ -6,6 +6,9 @@ port_profiles:
   TENANT_A_ALL:
     mode: trunk
     vlans: "110-119,120-130,160-161"
+  TENANT_B_ALL:
+    mode: trunk
+    vlans: "200-299"
 
 servers:
   TENANT_A_SRV1:
@@ -16,3 +19,23 @@ servers:
         profile: TENANT_A_ALL
         port_channel:
           mode: active
+  TENANT_B_SRV1_POD1:
+    rack: Rack1
+    adapters:
+      - server_ports: [ Eth1,Eth2 ]
+        switch_ports: [ Ethernet5, Ethernet5 ]
+        switches: [ EMEA_NORTH_01_LEAF2A, EMEA_NORTH_01_LEAF2B ]
+        profile: TENANT_B_ALL
+        port_channel:
+          mode: active
+          description: Very important server
+  TENANT_B_SRV1_POD2:
+    rack: Rack2
+    adapters:
+      - server_ports: [ Eth1,Eth2 ]
+        switch_ports: [ Ethernet5, Ethernet5 ]
+        switches: [ EMEA_NORTH_02_LEAF2A, EMEA_NORTH_02_LEAF2B ]
+        profile: TENANT_B_ALL
+        port_channel:
+          mode: active
+          description: Not so important server
