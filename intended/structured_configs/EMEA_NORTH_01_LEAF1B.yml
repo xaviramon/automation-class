@@ -262,7 +262,7 @@ local_users:
   alumne:
     privilege: 15
     role: network-admin
-    sha512_password: < Provide SHA512 HASH for password >
+    sha512_password: THISISATEST
 vrfs:
   MGMT:
     ip_routing: false

@@ -157,7 +157,7 @@ management api http-commands
 ```eos
 !
 username admin privilege 15 role network-admin nopassword
-username alumne privilege 15 role network-admin secret sha512 < Provide SHA512 HASH for password >
+username alumne privilege 15 role network-admin secret sha512 THISISATEST
 ```
 
 ## RADIUS Servers
@@ -229,6 +229,8 @@ vlan internal order ascending range 1006 1199
 | Ethernet3 | P2P_LINK_TO_EMEA_NORTH_01_LEAF1B_Ethernet3 | routed | - | 172.31.255.10/31 | default | 1500 | false | - | - |
 | Ethernet4 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2A_Ethernet3 | routed | - | 172.31.255.18/31 | default | 1500 | false | - | - |
 | Ethernet5 | P2P_LINK_TO_EMEA_NORTH_01_LEAF2B_Ethernet3 | routed | - | 172.31.255.26/31 | default | 1500 | false | - | - |
+| Ethernet7 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet2 | routed | - | 172.31.1.3/31 | default | 1500 | false | - | - |
+| Ethernet8 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet2 | routed | - | 172.31.1.131/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -261,6 +263,20 @@ interface Ethernet5
    mtu 1500
    no switchport
    ip address 172.31.255.26/31
+!
+interface Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.1.3/31
+!
+interface Ethernet8
+   description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.1.131/31
 ```
 
 ## Loopback Interfaces
@@ -375,10 +391,14 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
+| 172.31.1.2 | 65001 | default |
+| 172.31.1.130 | 65001 | default |
 | 172.31.255.3 | 65101 | default |
 | 172.31.255.11 | 65101 | default |
 | 172.31.255.19 | 65102 | default |
 | 172.31.255.27 | 65102 | default |
+| 192.168.100.1 | 65001 | default |
+| 192.168.100.2 | 65001 | default |
 | 192.168.255.5 | 65101 | default |
 | 192.168.255.6 | 65101 | default |
 | 192.168.255.7 | 65102 | default |
@@ -413,6 +433,10 @@ router bgp 65100
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
+   neighbor 172.31.1.2 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.2 remote-as 65001
+   neighbor 172.31.1.130 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.130 remote-as 65001
    neighbor 172.31.255.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.3 remote-as 65101
    neighbor 172.31.255.3 description EMEA_NORTH_01_LEAF1A_Ethernet2
@@ -425,6 +449,12 @@ router bgp 65100
    neighbor 172.31.255.27 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.27 remote-as 65102
    neighbor 172.31.255.27 description EMEA_NORTH_01_LEAF2B_Ethernet5
+   neighbor 192.168.100.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.100.1 remote-as 65001
+   neighbor 192.168.100.1 description EMEA_NORTH_SUPERSPINE1
+   neighbor 192.168.100.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.100.2 remote-as 65001
+   neighbor 192.168.100.2 description EMEA_NORTH_SUPERSPINE2
    neighbor 192.168.255.5 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.255.5 remote-as 65101
    neighbor 192.168.255.5 description EMEA_NORTH_01_LEAF1A

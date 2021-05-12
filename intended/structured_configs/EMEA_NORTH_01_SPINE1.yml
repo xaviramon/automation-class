@@ -48,6 +48,12 @@ router_bgp:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65102
       description: EMEA_NORTH_01_LEAF2B_Ethernet5
+    172.31.1.0:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: 65001
+    172.31.1.128:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: 65001
     192.168.255.5:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_LEAF1A
@@ -64,6 +70,14 @@ router_bgp:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_LEAF2B
       remote_as: 65102
+    192.168.100.1:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: EMEA_NORTH_SUPERSPINE1
+      remote_as: 65001
+    192.168.100.2:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: EMEA_NORTH_SUPERSPINE2
+      remote_as: 65001
   address_family_evpn:
     peer_groups:
       EVPN-OVERLAY-PEERS:
@@ -98,7 +112,7 @@ local_users:
   alumne:
     privilege: 15
     role: network-admin
-    sha512_password: < Provide SHA512 HASH for password >
+    sha512_password: THISISATEST
 vrfs:
   MGMT:
     ip_routing: false
@@ -156,6 +170,24 @@ ethernet_interfaces:
     type: routed
     shutdown: false
     ip_address: 172.31.255.24/31
+  Ethernet7:
+    peer: EMEA_NORTH_SUPERSPINE1
+    peer_interface: Ethernet1
+    peer_type: super-spine
+    description: P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.1/31
+  Ethernet8:
+    peer: EMEA_NORTH_SUPERSPINE2
+    peer_interface: Ethernet1
+    peer_type: super-spine
+    description: P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet1
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.129/31
 prefix_lists:
   PL-LOOPBACKS-EVPN-OVERLAY:
     sequence_numbers:

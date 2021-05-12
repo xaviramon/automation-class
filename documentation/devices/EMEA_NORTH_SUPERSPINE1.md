@@ -1,4 +1,4 @@
-# EMEA_NORTH_01_SUPERSPINE1
+# EMEA_NORTH_SUPERSPINE1
 # Table of Contents
 <!-- toc -->
 
@@ -26,6 +26,8 @@
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
+- [BFD](#bfd)
+  - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
@@ -349,6 +351,18 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 ### Router BGP Peer Groups
 
+#### EVPN-OVERLAY-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | evpn |
+| Next-hop unchanged | True |
+| Source | Loopback0 |
+| Bfd | true |
+| Ebgp multihop | 3 |
+| Send community | all |
+| Maximum routes | 0 (no limit) |
+
 #### IPv4-UNDERLAY-PEERS
 
 | Settings | Value |
@@ -365,6 +379,10 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | 172.31.1.3 | 65100 | default |
 | 172.31.2.1 | 65200 | default |
 | 172.31.2.3 | 65200 | default |
+| 192.168.155.1 | 65200 | default |
+| 192.168.155.2 | 65200 | default |
+| 192.168.255.1 | 65100 | default |
+| 192.168.255.2 | 65100 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -383,6 +401,14 @@ router bgp 65001
    graceful-restart restart-time 300
    graceful-restart
    maximum-paths 4 ecmp 4
+   neighbor EVPN-OVERLAY-PEERS peer group
+   neighbor EVPN-OVERLAY-PEERS next-hop-unchanged
+   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
+   neighbor EVPN-OVERLAY-PEERS bfd
+   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
+   neighbor EVPN-OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==
+   neighbor EVPN-OVERLAY-PEERS send-community
+   neighbor EVPN-OVERLAY-PEERS maximum-routes 0
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
@@ -395,10 +421,44 @@ router bgp 65001
    neighbor 172.31.2.1 remote-as 65200
    neighbor 172.31.2.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.3 remote-as 65200
+   neighbor 192.168.155.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.1 remote-as 65200
+   neighbor 192.168.155.1 description EMEA_NORTH_02_SPINE1
+   neighbor 192.168.155.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.2 remote-as 65200
+   neighbor 192.168.155.2 description EMEA_NORTH_02_SPINE2
+   neighbor 192.168.255.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.1 remote-as 65100
+   neighbor 192.168.255.1 description EMEA_NORTH_01_SPINE1
+   neighbor 192.168.255.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.2 remote-as 65100
+   neighbor 192.168.255.2 description EMEA_NORTH_01_SPINE2
    redistribute connected route-map RM-CONN-2-BGP
    !
+   address-family evpn
+      neighbor EVPN-OVERLAY-PEERS activate
+   !
    address-family ipv4
+      no neighbor EVPN-OVERLAY-PEERS activate
       neighbor IPv4-UNDERLAY-PEERS activate
+```
+
+# BFD
+
+## Router BFD
+
+### Router BFD Multihop Summary
+
+| Interval | Minimum RX | Multiplier |
+| -------- | ---------- | ---------- |
+| 1200 | 1200 | 3 |
+
+### Router BFD Multihop Device Configuration
+
+```eos
+!
+router bfd
+   multihop interval 1200 min-rx 1200 multiplier 3
 ```
 
 # Multicast

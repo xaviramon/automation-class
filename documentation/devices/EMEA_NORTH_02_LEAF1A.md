@@ -1,4 +1,4 @@
-# EMEA_NORTH_01_LEAF2A
+# EMEA_NORTH_02_LEAF1A
 # Table of Contents
 <!-- toc -->
 
@@ -63,7 +63,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | MGMT | 192.168.0.14/24 | 192.168.0.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.1.12/24 | 192.168.0.1 |
 
 #### IPv6
 
@@ -79,7 +79,7 @@ interface Management1
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 192.168.0.14/24
+   ip address 192.168.1.12/24
 ```
 
 ## DNS Domain
@@ -197,7 +197,7 @@ radius-server host 192.168.0.1 key 7 0207165218120E
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| EMEA_NORTH_01_LEAF2 | Vlan4094 | 10.255.252.5 | Port-Channel1 |
+| EMEA_NORTH_02_LEAF1 | Vlan4094 | 10.255.252.1 | Port-Channel1 |
 
 Dual primary detection is disabled.
 
@@ -206,9 +206,9 @@ Dual primary detection is disabled.
 ```eos
 !
 mlag configuration
-   domain-id EMEA_NORTH_01_LEAF2
+   domain-id EMEA_NORTH_02_LEAF1
    local-interface Vlan4094
-   peer-address 10.255.252.5
+   peer-address 10.255.252.1
    peer-link Port-Channel1
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -271,14 +271,10 @@ vlan internal order ascending range 1006 1199
 | 150 | Tenant_A_WAN_Zone_1 | none  |
 | 160 | Tenant_A_VMOTION | none  |
 | 161 | Tenant_A_NFS | none  |
-| 210 | Tenant_B_OP_Zone_1 | none  |
-| 211 | Tenant_B_OP_Zone_2 | none  |
-| 250 | Tenant_B_WAN_Zone_1 | none  |
 | 3009 | MLAG_iBGP_Common_VRF_Services | LEAF_PEER_L3  |
 | 3010 | MLAG_iBGP_Tenant_A_WEB_Zone | LEAF_PEER_L3  |
 | 3011 | MLAG_iBGP_Tenant_A_APP_Zone | LEAF_PEER_L3  |
 | 3013 | MLAG_iBGP_Tenant_A_WAN_Zone | LEAF_PEER_L3  |
-| 3020 | MLAG_iBGP_Tenant_B_WAN_Zone | LEAF_PEER_L3  |
 | 3129 | MLAG_iBGP_Tenant_A_DB_Zone | LEAF_PEER_L3  |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3  |
 | 4094 | MLAG_PEER | MLAG  |
@@ -320,15 +316,6 @@ vlan 160
 vlan 161
    name Tenant_A_NFS
 !
-vlan 210
-   name Tenant_B_OP_Zone_1
-!
-vlan 211
-   name Tenant_B_OP_Zone_2
-!
-vlan 250
-   name Tenant_B_WAN_Zone_1
-!
 vlan 3009
    name MLAG_iBGP_Common_VRF_Services
    trunk group LEAF_PEER_L3
@@ -343,10 +330,6 @@ vlan 3011
 !
 vlan 3013
    name MLAG_iBGP_Tenant_A_WAN_Zone
-   trunk group LEAF_PEER_L3
-!
-vlan 3020
-   name MLAG_iBGP_Tenant_B_WAN_Zone
    trunk group LEAF_PEER_L3
 !
 vlan 3129
@@ -372,8 +355,8 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | MLAG_PEER_EMEA_NORTH_01_LEAF2B_Ethernet1 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
-| Ethernet6 | MLAG_PEER_EMEA_NORTH_01_LEAF2B_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
+| Ethernet1 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet1 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
+| Ethernet6 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
 
 *Inherited from Port-Channel Interface
 
@@ -381,34 +364,34 @@ vlan 4094
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet4 | routed | - | 172.31.255.17/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet4 | routed | - | 172.31.255.19/31 | default | 1500 | false | - | - |
+| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet2 | routed | - | 172.31.155.1/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet2 | routed | - | 172.31.155.3/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2B_Ethernet1
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet1
    no shutdown
    channel-group 1 mode active
 !
 interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet4
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet2
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.255.17/31
+   ip address 172.31.155.1/31
 !
 interface Ethernet3
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet4
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet2
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.255.19/31
+   ip address 172.31.155.3/31
 !
 interface Ethernet6
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2B_Ethernet6
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet6
    no shutdown
    channel-group 1 mode active
 ```
@@ -421,14 +404,14 @@ interface Ethernet6
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | MLAG_PEER_EMEA_NORTH_01_LEAF2B_Po1 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
+| Port-Channel1 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po1 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 
 ### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
 interface Port-Channel1
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2B_Po1
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po1
    no shutdown
    switchport
    switchport trunk allowed vlan 2-4094
@@ -445,9 +428,9 @@ interface Port-Channel1
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | default | 192.168.255.7/32 |
-| Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 192.168.254.7/32 |
-| Loopback100 | Common_VRF_Services_VTEP_DIAGNOSTICS | Common_VRF_Services | 10.255.1.7/32 |
+| Loopback0 | EVPN_Overlay_Peering | default | 192.168.155.5/32 |
+| Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 192.168.154.5/32 |
+| Loopback100 | Common_VRF_Services_VTEP_DIAGNOSTICS | Common_VRF_Services | 10.255.1.5/32 |
 
 #### IPv6
 
@@ -465,18 +448,18 @@ interface Port-Channel1
 interface Loopback0
    description EVPN_Overlay_Peering
    no shutdown
-   ip address 192.168.255.7/32
+   ip address 192.168.155.5/32
 !
 interface Loopback1
    description VTEP_VXLAN_Tunnel_Source
    no shutdown
-   ip address 192.168.254.7/32
+   ip address 192.168.154.5/32
 !
 interface Loopback100
    description Common_VRF_Services_VTEP_DIAGNOSTICS
    no shutdown
    vrf Common_VRF_Services
-   ip address 10.255.1.7/32
+   ip address 10.255.1.5/32
 ```
 
 ## VLAN Interfaces
@@ -494,14 +477,10 @@ interface Loopback100
 | Vlan140 |  Tenant_A_DB_BZone_1  |  Tenant_A_DB_Zone  |  -  |  false  |
 | Vlan141 |  Tenant_A_DB_Zone_2  |  Tenant_A_DB_Zone  |  -  |  false  |
 | Vlan150 |  Tenant_A_WAN_Zone_1  |  Tenant_A_WAN_Zone  |  -  |  false  |
-| Vlan210 |  Tenant_B_OP_Zone_1  |  Tenant_B_OP_Zone  |  -  |  false  |
-| Vlan211 |  Tenant_B_OP_Zone_2  |  Tenant_B_OP_Zone  |  -  |  false  |
-| Vlan250 |  Tenant_B_WAN_Zone_1  |  Tenant_B_WAN_Zone  |  -  |  false  |
 | Vlan3009 |  MLAG_PEER_L3_iBGP: vrf Common_VRF_Services  |  Common_VRF_Services  |  1500  |  false  |
 | Vlan3010 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_WEB_Zone  |  Tenant_A_WEB_Zone  |  1500  |  false  |
 | Vlan3011 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_APP_Zone  |  Tenant_A_APP_Zone  |  1500  |  false  |
 | Vlan3013 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_WAN_Zone  |  Tenant_A_WAN_Zone  |  1500  |  false  |
-| Vlan3020 |  MLAG_PEER_L3_iBGP: vrf Tenant_B_WAN_Zone  |  Tenant_B_WAN_Zone  |  1500  |  false  |
 | Vlan3129 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_DB_Zone  |  Tenant_A_DB_Zone  |  1500  |  false  |
 | Vlan4093 |  MLAG_PEER_L3_PEERING  |  default  |  1500  |  false  |
 | Vlan4094 |  MLAG_PEER  |  default  |  1500  |  false  |
@@ -519,17 +498,13 @@ interface Loopback100
 | Vlan140 |  Tenant_A_DB_Zone  |  -  |  10.1.40.1/24  |  -  |  -  |  -  |  -  |
 | Vlan141 |  Tenant_A_DB_Zone  |  -  |  10.1.41.1/24  |  -  |  -  |  -  |  -  |
 | Vlan150 |  Tenant_A_WAN_Zone  |  -  |  10.1.40.1/24  |  -  |  -  |  -  |  -  |
-| Vlan210 |  Tenant_B_OP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
-| Vlan211 |  Tenant_B_OP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
-| Vlan250 |  Tenant_B_WAN_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3009 |  Common_VRF_Services  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3010 |  Tenant_A_WEB_Zone  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3011 |  Tenant_A_APP_Zone  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3013 |  Tenant_A_WAN_Zone  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3020 |  Tenant_B_WAN_Zone  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3129 |  Tenant_A_DB_Zone  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan4093 |  default  |  10.255.254.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan4094 |  default  |  10.255.252.4/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3009 |  Common_VRF_Services  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3010 |  Tenant_A_WEB_Zone  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3011 |  Tenant_A_APP_Zone  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3013 |  Tenant_A_WAN_Zone  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3129 |  Tenant_A_DB_Zone  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan4093 |  default  |  10.255.254.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  10.255.252.0/31  |  -  |  -  |  -  |  -  |  -  |
 
 
 ### VLAN Interfaces Device Configuration
@@ -592,75 +567,53 @@ interface Vlan150
    vrf Tenant_A_WAN_Zone
    ip address virtual 10.1.40.1/24
 !
-interface Vlan210
-   description Tenant_B_OP_Zone_1
-   no shutdown
-   vrf Tenant_B_OP_Zone
-!
-interface Vlan211
-   description Tenant_B_OP_Zone_2
-   no shutdown
-   vrf Tenant_B_OP_Zone
-!
-interface Vlan250
-   description Tenant_B_WAN_Zone_1
-   no shutdown
-   vrf Tenant_B_WAN_Zone
-!
 interface Vlan3009
    description MLAG_PEER_L3_iBGP: vrf Common_VRF_Services
    no shutdown
    mtu 1500
    vrf Common_VRF_Services
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan3010
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_WEB_Zone
    no shutdown
    mtu 1500
    vrf Tenant_A_WEB_Zone
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan3011
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_APP_Zone
    no shutdown
    mtu 1500
    vrf Tenant_A_APP_Zone
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan3013
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_WAN_Zone
    no shutdown
    mtu 1500
    vrf Tenant_A_WAN_Zone
-   ip address 10.255.254.4/31
-!
-interface Vlan3020
-   description MLAG_PEER_L3_iBGP: vrf Tenant_B_WAN_Zone
-   no shutdown
-   mtu 1500
-   vrf Tenant_B_WAN_Zone
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan3129
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_DB_Zone
    no shutdown
    mtu 1500
    vrf Tenant_A_DB_Zone
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan4093
    description MLAG_PEER_L3_PEERING
    no shutdown
    mtu 1500
-   ip address 10.255.254.4/31
+   ip address 10.255.254.0/31
 !
 interface Vlan4094
    description MLAG_PEER
    no shutdown
    mtu 1500
    no autostate
-   ip address 10.255.252.4/31
+   ip address 10.255.252.0/31
 ```
 
 ## VXLAN Interface
@@ -686,9 +639,6 @@ interface Vlan4094
 | 150 | 10150 |
 | 160 | 55160 |
 | 161 | 10161 |
-| 210 | 20210 |
-| 211 | 20211 |
-| 250 | 20250 |
 
 #### VRF to VNI Mappings
 
@@ -699,8 +649,6 @@ interface Vlan4094
 | Tenant_A_DB_Zone | 130 |
 | Tenant_A_WAN_Zone | 14 |
 | Tenant_A_WEB_Zone | 11 |
-| Tenant_B_OP_Zone | 2000 |
-| Tenant_B_WAN_Zone | 21 |
 
 ### VXLAN Interface Device Configuration
 
@@ -721,16 +669,11 @@ interface Vxlan1
    vxlan vlan 150 vni 10150
    vxlan vlan 160 vni 55160
    vxlan vlan 161 vni 10161
-   vxlan vlan 210 vni 20210
-   vxlan vlan 211 vni 20211
-   vxlan vlan 250 vni 20250
    vxlan vrf Common_VRF_Services vni 10
    vxlan vrf Tenant_A_APP_Zone vni 12
    vxlan vrf Tenant_A_DB_Zone vni 130
    vxlan vrf Tenant_A_WAN_Zone vni 14
    vxlan vrf Tenant_A_WEB_Zone vni 11
-   vxlan vrf Tenant_B_OP_Zone vni 2000
-   vxlan vrf Tenant_B_WAN_Zone vni 21
 ```
 
 # Routing
@@ -760,8 +703,6 @@ ip virtual-router mac-address 00:1c:73:00:dc:01
 | Tenant_A_DB_Zone | true |
 | Tenant_A_WAN_Zone | true |
 | Tenant_A_WEB_Zone | true |
-| Tenant_B_OP_Zone | true |
-| Tenant_B_WAN_Zone | true |
 
 ### IP Routing Device Configuration
 
@@ -774,8 +715,6 @@ ip routing vrf Tenant_A_APP_Zone
 ip routing vrf Tenant_A_DB_Zone
 ip routing vrf Tenant_A_WAN_Zone
 ip routing vrf Tenant_A_WEB_Zone
-ip routing vrf Tenant_B_OP_Zone
-ip routing vrf Tenant_B_WAN_Zone
 ```
 ## IPv6 Routing
 
@@ -789,8 +728,6 @@ ip routing vrf Tenant_B_WAN_Zone
 | Tenant_A_DB_Zone | false |
 | Tenant_A_WAN_Zone | false |
 | Tenant_A_WEB_Zone | false |
-| Tenant_B_OP_Zone | false |
-| Tenant_B_WAN_Zone | false |
 
 
 ## Static Routes
@@ -816,7 +753,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65102|  192.168.255.7 |
+| 65101|  192.168.155.5 |
 
 | BGP Tuning |
 | ---------- |
@@ -844,7 +781,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| Remote AS | 65100 |
+| Remote AS | 65200 |
 | Send community | all |
 | Maximum routes | 12000 |
 
@@ -853,7 +790,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| Remote AS | 65102 |
+| Remote AS | 65101 |
 | Next-hop self | True |
 | Send community | all |
 | Maximum routes | 12000 |
@@ -862,17 +799,16 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default |
-| 172.31.255.16 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
-| 172.31.255.18 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
-| 192.168.255.1 | 65100 | default |
-| 192.168.255.2 | 65100 | default |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Common_VRF_Services |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_APP_Zone |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_DB_Zone |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WAN_Zone |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WEB_Zone |
-| 10.255.254.5 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_B_WAN_Zone |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default |
+| 172.31.155.0 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
+| 172.31.155.2 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
+| 192.168.155.1 | 65200 | default |
+| 192.168.155.2 | 65200 | default |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Common_VRF_Services |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_APP_Zone |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_DB_Zone |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WAN_Zone |
+| 10.255.254.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WEB_Zone |
 
 ### Router BGP EVPN Address Family
 
@@ -882,39 +818,34 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 110 | 192.168.255.7:10110 | 10110:10110 | - | - | learned |
-| 111 | 192.168.255.7:50111 | 50111:50111 | - | - | learned |
-| 120 | 192.168.255.7:10120 | 10120:10120 | - | - | learned |
-| 121 | 192.168.255.7:10121 | 10121:10121 | - | - | learned |
-| 130 | 192.168.255.7:10130 | 10130:10130 | - | - | learned |
-| 131 | 192.168.255.7:10131 | 10131:10131 | - | - | learned |
-| 140 | 192.168.255.7:10140 | 10140:10140 | - | - | learned |
-| 141 | 192.168.255.7:10141 | 10141:10141 | - | - | learned |
-| 150 | 192.168.255.7:10150 | 10150:10150 | - | - | learned |
-| 160 | 192.168.255.7:55160 | 55160:55160 | - | - | learned |
-| 161 | 192.168.255.7:10161 | 10161:10161 | - | - | learned |
-| 210 | 192.168.255.7:20210 | 20210:20210 | - | - | learned |
-| 211 | 192.168.255.7:20211 | 20211:20211 | - | - | learned |
-| 250 | 192.168.255.7:20250 | 20250:20250 | - | - | learned |
+| 110 | 192.168.155.5:10110 | 10110:10110 | - | - | learned |
+| 111 | 192.168.155.5:50111 | 50111:50111 | - | - | learned |
+| 120 | 192.168.155.5:10120 | 10120:10120 | - | - | learned |
+| 121 | 192.168.155.5:10121 | 10121:10121 | - | - | learned |
+| 130 | 192.168.155.5:10130 | 10130:10130 | - | - | learned |
+| 131 | 192.168.155.5:10131 | 10131:10131 | - | - | learned |
+| 140 | 192.168.155.5:10140 | 10140:10140 | - | - | learned |
+| 141 | 192.168.155.5:10141 | 10141:10141 | - | - | learned |
+| 150 | 192.168.155.5:10150 | 10150:10150 | - | - | learned |
+| 160 | 192.168.155.5:55160 | 55160:55160 | - | - | learned |
+| 161 | 192.168.155.5:10161 | 10161:10161 | - | - | learned |
 
 #### Router BGP EVPN VRFs
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| Common_VRF_Services | 192.168.255.7:10 | connected |
-| Tenant_A_APP_Zone | 192.168.255.7:12 | connected |
-| Tenant_A_DB_Zone | 192.168.255.7:130 | connected |
-| Tenant_A_WAN_Zone | 192.168.255.7:14 | connected |
-| Tenant_A_WEB_Zone | 192.168.255.7:11 | connected |
-| Tenant_B_OP_Zone | 192.168.255.7:2000 | connected |
-| Tenant_B_WAN_Zone | 192.168.255.7:21 | connected |
+| Common_VRF_Services | 192.168.155.5:10 | connected |
+| Tenant_A_APP_Zone | 192.168.155.5:12 | connected |
+| Tenant_A_DB_Zone | 192.168.155.5:130 | connected |
+| Tenant_A_WAN_Zone | 192.168.155.5:14 | connected |
+| Tenant_A_WEB_Zone | 192.168.155.5:11 | connected |
 
 ### Router BGP Device Configuration
 
 ```eos
 !
-router bgp 65102
-   router-id 192.168.255.7
+router bgp 65101
+   router-id 192.168.155.5
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
@@ -928,99 +859,84 @@ router bgp 65102
    neighbor EVPN-OVERLAY-PEERS send-community
    neighbor EVPN-OVERLAY-PEERS maximum-routes 0
    neighbor IPv4-UNDERLAY-PEERS peer group
-   neighbor IPv4-UNDERLAY-PEERS remote-as 65100
+   neighbor IPv4-UNDERLAY-PEERS remote-as 65200
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER peer group
-   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65102
+   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65101
    neighbor MLAG-IPv4-UNDERLAY-PEER next-hop-self
    neighbor MLAG-IPv4-UNDERLAY-PEER password 7 vnEaG8gMeQf3d3cN6PktXQ==
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER route-map RM-MLAG-PEER-IN in
-   neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
-   neighbor 10.255.254.5 description EMEA_NORTH_01_LEAF2B
-   neighbor 172.31.255.16 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.16 description EMEA_NORTH_01_SPINE1_Ethernet4
-   neighbor 172.31.255.18 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.18 description EMEA_NORTH_01_SPINE2_Ethernet4
-   neighbor 192.168.255.1 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.255.1 remote-as 65100
-   neighbor 192.168.255.1 description EMEA_NORTH_01_SPINE1
-   neighbor 192.168.255.2 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.255.2 remote-as 65100
-   neighbor 192.168.255.2 description EMEA_NORTH_01_SPINE2
+   neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
+   neighbor 10.255.254.1 description EMEA_NORTH_02_LEAF1B
+   neighbor 172.31.155.0 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.0 description EMEA_NORTH_02_SPINE1_Ethernet2
+   neighbor 172.31.155.2 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.2 description EMEA_NORTH_02_SPINE2_Ethernet2
+   neighbor 192.168.155.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.1 remote-as 65200
+   neighbor 192.168.155.1 description EMEA_NORTH_02_SPINE1
+   neighbor 192.168.155.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.2 remote-as 65200
+   neighbor 192.168.155.2 description EMEA_NORTH_02_SPINE2
    redistribute connected route-map RM-CONN-2-BGP
    !
    vlan 110
-      rd 192.168.255.7:10110
+      rd 192.168.155.5:10110
       route-target both 10110:10110
       redistribute learned
    !
    vlan 111
-      rd 192.168.255.7:50111
+      rd 192.168.155.5:50111
       route-target both 50111:50111
       redistribute learned
    !
    vlan 120
-      rd 192.168.255.7:10120
+      rd 192.168.155.5:10120
       route-target both 10120:10120
       redistribute learned
    !
    vlan 121
-      rd 192.168.255.7:10121
+      rd 192.168.155.5:10121
       route-target both 10121:10121
       redistribute learned
    !
    vlan 130
-      rd 192.168.255.7:10130
+      rd 192.168.155.5:10130
       route-target both 10130:10130
       redistribute learned
    !
    vlan 131
-      rd 192.168.255.7:10131
+      rd 192.168.155.5:10131
       route-target both 10131:10131
       redistribute learned
    !
    vlan 140
-      rd 192.168.255.7:10140
+      rd 192.168.155.5:10140
       route-target both 10140:10140
       redistribute learned
    !
    vlan 141
-      rd 192.168.255.7:10141
+      rd 192.168.155.5:10141
       route-target both 10141:10141
       redistribute learned
    !
    vlan 150
-      rd 192.168.255.7:10150
+      rd 192.168.155.5:10150
       route-target both 10150:10150
       redistribute learned
    !
    vlan 160
-      rd 192.168.255.7:55160
+      rd 192.168.155.5:55160
       route-target both 55160:55160
       redistribute learned
    !
    vlan 161
-      rd 192.168.255.7:10161
+      rd 192.168.155.5:10161
       route-target both 10161:10161
-      redistribute learned
-   !
-   vlan 210
-      rd 192.168.255.7:20210
-      route-target both 20210:20210
-      redistribute learned
-   !
-   vlan 211
-      rd 192.168.255.7:20211
-      route-target both 20211:20211
-      redistribute learned
-   !
-   vlan 250
-      rd 192.168.255.7:20250
-      route-target both 20250:20250
       redistribute learned
    !
    address-family evpn
@@ -1032,58 +948,43 @@ router bgp 65102
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    vrf Common_VRF_Services
-      rd 192.168.255.7:10
+      rd 192.168.155.5:10
       route-target import evpn 10:10
       route-target export evpn 10:10
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
+      router-id 192.168.155.5
+      neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_APP_Zone
-      rd 192.168.255.7:12
+      rd 192.168.155.5:12
       route-target import evpn 12:12
       route-target export evpn 12:12
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
+      router-id 192.168.155.5
+      neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_DB_Zone
-      rd 192.168.255.7:130
+      rd 192.168.155.5:130
       route-target import evpn 130:130
       route-target export evpn 130:130
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
+      router-id 192.168.155.5
+      neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_WAN_Zone
-      rd 192.168.255.7:14
+      rd 192.168.155.5:14
       route-target import evpn 14:14
       route-target export evpn 14:14
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
+      router-id 192.168.155.5
+      neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_WEB_Zone
-      rd 192.168.255.7:11
+      rd 192.168.155.5:11
       route-target import evpn 11:11
       route-target export evpn 11:11
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
-      redistribute connected
-   !
-   vrf Tenant_B_OP_Zone
-      rd 192.168.255.7:2000
-      route-target import evpn 2000:2000
-      route-target export evpn 2000:2000
-      router-id 192.168.255.7
-      redistribute connected
-   !
-   vrf Tenant_B_WAN_Zone
-      rd 192.168.255.7:21
-      route-target import evpn 21:21
-      route-target export evpn 21:21
-      router-id 192.168.255.7
-      neighbor 10.255.254.5 peer group MLAG-IPv4-UNDERLAY-PEER
+      router-id 192.168.155.5
+      neighbor 10.255.254.1 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
 ```
 
@@ -1135,16 +1036,16 @@ no ip igmp snooping vlan 110
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 192.168.255.0/24 eq 32 |
-| 20 | permit 192.168.254.0/24 eq 32 |
+| 10 | permit 192.168.155.0/24 eq 32 |
+| 20 | permit 192.168.154.0/24 eq 32 |
 
 ### Prefix-lists Device Configuration
 
 ```eos
 !
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 192.168.255.0/24 eq 32
-   seq 20 permit 192.168.254.0/24 eq 32
+   seq 10 permit 192.168.155.0/24 eq 32
+   seq 20 permit 192.168.154.0/24 eq 32
 ```
 
 ## Route-maps
@@ -1189,8 +1090,6 @@ route-map RM-MLAG-PEER-IN permit 10
 | Tenant_A_DB_Zone | enabled |
 | Tenant_A_WAN_Zone | enabled |
 | Tenant_A_WEB_Zone | enabled |
-| Tenant_B_OP_Zone | enabled |
-| Tenant_B_WAN_Zone | enabled |
 
 ## VRF Instances Device Configuration
 
@@ -1207,10 +1106,6 @@ vrf instance Tenant_A_DB_Zone
 vrf instance Tenant_A_WAN_Zone
 !
 vrf instance Tenant_A_WEB_Zone
-!
-vrf instance Tenant_B_OP_Zone
-!
-vrf instance Tenant_B_WAN_Zone
 ```
 
 # Virtual Source NAT
@@ -1219,13 +1114,13 @@ vrf instance Tenant_B_WAN_Zone
 
 | Source NAT VRF | Source NAT IP Address |
 | -------------- | --------------------- |
-| Common_VRF_Services | 10.255.1.7 |
+| Common_VRF_Services | 10.255.1.5 |
 
 ## Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf Common_VRF_Services address 10.255.1.7
+ip address virtual source-nat vrf Common_VRF_Services address 10.255.1.5
 ```
 
 # Quality Of Service

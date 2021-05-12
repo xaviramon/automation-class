@@ -29,7 +29,7 @@ local_users:
   alumne:
     privilege: 15
     role: network-admin
-    sha512_password: "< Provide SHA512 HASH for password >"
+    sha512_password: "THISISATEST"
 
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1

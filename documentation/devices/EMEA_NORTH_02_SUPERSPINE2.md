@@ -1,4 +1,4 @@
-# EMEA_NORTH_01_SUPERSPINE1
+# EMEA_NORTH_02_SUPERSPINE2
 # Table of Contents
 <!-- toc -->
 
@@ -47,7 +47,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | MGMT | 192.168.0.1/24 | 192.168.0.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.1.2/24 | 192.168.0.1 |
 
 #### IPv6
 
@@ -63,7 +63,7 @@ interface Management1
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 192.168.0.1/24
+   ip address 192.168.1.2/24
 ```
 
 ## DNS Domain
@@ -223,42 +223,42 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7 | routed | - | 172.31.1.0/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7 | routed | - | 172.31.1.2/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7 | routed | - | 172.31.2.0/31 | default | 1500 | false | - | - |
-| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7 | routed | - | 172.31.2.2/31 | default | 1500 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet8 | routed | - | 172.31.1.128/31 | default | 1500 | false | - | - |
+| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet8 | routed | - | 172.31.1.130/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet8 | routed | - | 172.31.2.128/31 | default | 1500 | false | - | - |
+| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet8 | routed | - | 172.31.2.130/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.1.0/31
+   ip address 172.31.1.128/31
 !
 interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.1.2/31
+   ip address 172.31.1.130/31
 !
 interface Ethernet3
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.2.0/31
+   ip address 172.31.2.128/31
 !
 interface Ethernet4
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.2.2/31
+   ip address 172.31.2.130/31
 ```
 
 ## Loopback Interfaces
@@ -269,7 +269,7 @@ interface Ethernet4
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | default | 192.168.100.1/32 |
+| Loopback0 | EVPN_Overlay_Peering | default | 192.168.100.2/32 |
 
 #### IPv6
 
@@ -285,7 +285,7 @@ interface Ethernet4
 interface Loopback0
    description EVPN_Overlay_Peering
    no shutdown
-   ip address 192.168.100.1/32
+   ip address 192.168.100.2/32
 ```
 
 # Routing
@@ -337,7 +337,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65001|  192.168.100.1 |
+| 65001|  192.168.100.2 |
 
 | BGP Tuning |
 | ---------- |
@@ -361,10 +361,10 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
-| 172.31.1.1 | 65100 | default |
-| 172.31.1.3 | 65100 | default |
-| 172.31.2.1 | 65200 | default |
-| 172.31.2.3 | 65200 | default |
+| 172.31.1.129 | 65100 | default |
+| 172.31.1.131 | 65100 | default |
+| 172.31.2.129 | 65200 | default |
+| 172.31.2.131 | 65200 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -377,7 +377,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 ```eos
 !
 router bgp 65001
-   router-id 192.168.100.1
+   router-id 192.168.100.2
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
@@ -387,14 +387,14 @@ router bgp 65001
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
-   neighbor 172.31.1.1 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.1 remote-as 65100
-   neighbor 172.31.1.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.3 remote-as 65100
-   neighbor 172.31.2.1 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.2.1 remote-as 65200
-   neighbor 172.31.2.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.2.3 remote-as 65200
+   neighbor 172.31.1.129 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.129 remote-as 65100
+   neighbor 172.31.1.131 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.131 remote-as 65100
+   neighbor 172.31.2.129 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.129 remote-as 65200
+   neighbor 172.31.2.131 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.131 remote-as 65200
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family ipv4

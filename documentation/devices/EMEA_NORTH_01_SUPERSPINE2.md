@@ -4,11 +4,13 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
+  - [DNS Domain](#dns-domain)
   - [Name Servers](#name-servers)
   - [NTP](#ntp)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
+  - [RADIUS Servers](#radius-servers)
 - [Monitoring](#monitoring)
 - [Spanning Tree](#spanning-tree)
   - [Spanning Tree Summary](#spanning-tree-summary)
@@ -24,8 +26,6 @@
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
-- [BFD](#bfd)
-  - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
@@ -47,7 +47,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | MGMT | 192.168.0.2/24 | 192.168.200.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.0.2/24 | 192.168.0.1 |
 
 #### IPv6
 
@@ -64,6 +64,18 @@ interface Management1
    no shutdown
    vrf MGMT
    ip address 192.168.0.2/24
+```
+
+## DNS Domain
+
+### DNS domain: atd.lab
+
+### DNS Domain Device Configuration
+
+```eos
+!
+dns domain atd.lab
+!
 ```
 
 ## Name Servers
@@ -88,20 +100,16 @@ ip name-server vrf MGMT 8.8.8.8
 
 - Local Interface: Management1
 
-- VRF: MGMT
-
 | Node | Primary |
 | ---- | ------- |
-| de.pool.ntp.org | true |
-| se.pool.ntp.org | - |
+| 192.168.0.1 | true |
 
 ### NTP Device Configuration
 
 ```eos
 !
-ntp local-interface vrf MGMT Management1
-ntp server vrf MGMT de.pool.ntp.org prefer
-ntp server vrf MGMT se.pool.ntp.org
+ntp local-interface  Management1
+ntp server  192.168.0.1 prefer
 ```
 
 ## Management API HTTP
@@ -147,7 +155,22 @@ management api http-commands
 ```eos
 !
 username admin privilege 15 role network-admin nopassword
-username alumne privilege 15 role network-admin secret sha512 < Provide SHA512 HASH for password >
+username alumne privilege 15 role network-admin secret sha512 THISISATEST
+```
+
+## RADIUS Servers
+
+### RADIUS Servers
+
+| VRF | RADIUS Servers |
+| --- | ---------------|
+|  default | 192.168.0.1 |
+
+### RADIUS Servers Device Configuration
+
+```eos
+!
+radius-server host 192.168.0.1 key 7 0207165218120E
 ```
 
 # Monitoring
@@ -200,26 +223,42 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet6 | routed | - | 172.16.11.64/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet6 | routed | - | 172.16.11.66/31 | default | 1500 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet8 | routed | - | 172.31.1.128/31 | default | 1500 | false | - | - |
+| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet8 | routed | - | 172.31.1.130/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet8 | routed | - | 172.31.2.128/31 | default | 1500 | false | - | - |
+| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet8 | routed | - | 172.31.2.130/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet6
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.16.11.64/31
+   ip address 172.31.1.128/31
 !
 interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet6
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet8
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.16.11.66/31
+   ip address 172.31.1.130/31
+!
+interface Ethernet3
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet8
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.2.128/31
+!
+interface Ethernet4
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet8
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.2.130/31
 ```
 
 ## Loopback Interfaces
@@ -281,15 +320,15 @@ no ip routing vrf MGMT
 
 | VRF | Destination Prefix | Next Hop IP             | Exit interface      | Administrative Distance       | Tag               | Route Name                    | Metric         |
 | --- | ------------------ | ----------------------- | ------------------- | ----------------------------- | ----------------- | ----------------------------- | -------------- |
-| MGMT  | 192.168.200.0/24 |  192.168.200.1  |  -  |  1  |  -  |  -  |  - |
-| MGMT  | 0.0.0.0/0 |  192.168.200.1  |  -  |  1  |  -  |  -  |  - |
+| MGMT  | 192.168.0.0/24 |  192.168.0.1  |  -  |  1  |  -  |  -  |  - |
+| MGMT  | 0.0.0.0/0 |  192.168.0.1  |  -  |  1  |  -  |  -  |  - |
 
 ### Static Routes Device Configuration
 
 ```eos
 !
-ip route vrf MGMT 192.168.200.0/24 192.168.200.1
-ip route vrf MGMT 0.0.0.0/0 192.168.200.1
+ip route vrf MGMT 192.168.0.0/24 192.168.0.1
+ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 ```
 
 ## Router BGP
@@ -306,21 +345,9 @@ ip route vrf MGMT 0.0.0.0/0 192.168.200.1
 | distance bgp 20 200 200 |
 | graceful-restart restart-time 300 |
 | graceful-restart |
-| maximum-paths 8 ecmp 8 |
+| maximum-paths 4 ecmp 4 |
 
 ### Router BGP Peer Groups
-
-#### EVPN-OVERLAY-PEERS
-
-| Settings | Value |
-| -------- | ----- |
-| Address Family | evpn |
-| Next-hop unchanged | True |
-| Source | Loopback0 |
-| Bfd | true |
-| Ebgp multihop | 3 |
-| Send community | all |
-| Maximum routes | 0 (no limit) |
 
 #### IPv4-UNDERLAY-PEERS
 
@@ -334,8 +361,10 @@ ip route vrf MGMT 0.0.0.0/0 192.168.200.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
-| 172.16.11.65 | 65100 | default |
-| 172.16.11.67 | 65100 | default |
+| 172.31.1.129 | 65100 | default |
+| 172.31.1.131 | 65100 | default |
+| 172.31.2.129 | 65200 | default |
+| 172.31.2.131 | 65200 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -353,49 +382,23 @@ router bgp 65001
    distance bgp 20 200 200
    graceful-restart restart-time 300
    graceful-restart
-   maximum-paths 8 ecmp 8
-   neighbor EVPN-OVERLAY-PEERS peer group
-   neighbor EVPN-OVERLAY-PEERS next-hop-unchanged
-   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
-   neighbor EVPN-OVERLAY-PEERS bfd
-   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
-   neighbor EVPN-OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==
-   neighbor EVPN-OVERLAY-PEERS send-community
-   neighbor EVPN-OVERLAY-PEERS maximum-routes 0
+   maximum-paths 4 ecmp 4
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
-   neighbor 172.16.11.65 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.11.65 remote-as 65100
-   neighbor 172.16.11.67 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.11.67 remote-as 65100
+   neighbor 172.31.1.129 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.129 remote-as 65100
+   neighbor 172.31.1.131 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.1.131 remote-as 65100
+   neighbor 172.31.2.129 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.129 remote-as 65200
+   neighbor 172.31.2.131 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.131 remote-as 65200
    redistribute connected route-map RM-CONN-2-BGP
    !
-   address-family evpn
-      neighbor EVPN-OVERLAY-PEERS activate
-   !
    address-family ipv4
-      no neighbor EVPN-OVERLAY-PEERS activate
       neighbor IPv4-UNDERLAY-PEERS activate
-```
-
-# BFD
-
-## Router BFD
-
-### Router BFD Multihop Summary
-
-| Interval | Minimum RX | Multiplier |
-| -------- | ---------- | ---------- |
-| 1200 | 1200 | 3 |
-
-### Router BFD Multihop Device Configuration
-
-```eos
-!
-router bfd
-   multihop interval 1200 min-rx 1200 multiplier 3
 ```
 
 # Multicast
@@ -410,14 +413,14 @@ router bfd
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 192.168.100.0/24 le 32 |
+| 10 | permit 192.168.100.0/24 eq 32 |
 
 ### Prefix-lists Device Configuration
 
 ```eos
 !
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 192.168.100.0/24 le 32
+   seq 10 permit 192.168.100.0/24 eq 32
 ```
 
 ## Route-maps

@@ -1,6 +1,41 @@
 ---
 dc_name : EMEA_NORTH   # data center name
 
+max_super_spines: 2  # maximum number of super-spines, changing this parameter affects address allocation
+
+super_spine:
+  platform: vEOS-LAB  # super-spine platform
+  bgp_as: 65001
+  spine_interfaces:
+    - [ Ethernet7, Ethernet8 ]
+    #- [ Ethernet7, Ethernet8, Ethernet9, Ethernet10 ]
+  nodes:
+    EMEA_NORTH_SUPERSPINE1:  # super-spine name
+      id: 1
+      mgmt_ip: 192.168.0.1/24
+      evpn_role: server
+      evpn_route_servers: [ EMEA_NORTH_01_SPINE1, EMEA_NORTH_01_SPINE2, EMEA_NORTH_02_SPINE1, EMEA_NORTH_02_SPINE2 ]
+    EMEA_NORTH_SUPERSPINE2:  # super-spine name
+      id: 2
+      mgmt_ip: 192.168.0.2/24
+      evpn_role: server
+      evpn_route_servers: [ EMEA_NORTH_01_SPINE1, EMEA_NORTH_01_SPINE2, EMEA_NORTH_02_SPINE1, EMEA_NORTH_02_SPINE2 ]
+
+# IP address range for loopbacks for all super-spines in the DC,
+# assigned as /32s
+# Assign range larger then total super-spines
+super_spine_loopback_network_summary: 192.168.100.0/24
+
+
+# additional lines for super-spine BGP config
+super_spine_bgp_defaults:
+  #  - update wait-for-convergence
+  #  - update wait-install
+  - no bgp default ipv4-unicast
+  - distance bgp 20 200 200
+  - graceful-restart restart-time 300
+  - graceful-restart
+
 # bgp peer groups passwords
 bgp_peer_groups:
   IPv4_UNDERLAY_PEERS:

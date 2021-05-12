@@ -1,4 +1,4 @@
-# EMEA_NORTH_01_SUPERSPINE1
+# EMEA_NORTH_02_SPINE2
 # Table of Contents
 <!-- toc -->
 
@@ -26,6 +26,8 @@
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
+- [BFD](#bfd)
+  - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
@@ -47,7 +49,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | MGMT | 192.168.0.1/24 | 192.168.0.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.1.11/24 | 192.168.0.1 |
 
 #### IPv6
 
@@ -63,7 +65,7 @@ interface Management1
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 192.168.0.1/24
+   ip address 192.168.1.11/24
 ```
 
 ## DNS Domain
@@ -223,42 +225,58 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7 | routed | - | 172.31.1.0/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7 | routed | - | 172.31.1.2/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7 | routed | - | 172.31.2.0/31 | default | 1500 | false | - | - |
-| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7 | routed | - | 172.31.2.2/31 | default | 1500 | false | - | - |
+| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_02_LEAF1A_Ethernet3 | routed | - | 172.31.155.2/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_LEAF1B_Ethernet3 | routed | - | 172.31.155.10/31 | default | 1500 | false | - | - |
+| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_LEAF2A_Ethernet3 | routed | - | 172.31.155.18/31 | default | 1500 | false | - | - |
+| Ethernet5 | P2P_LINK_TO_EMEA_NORTH_02_LEAF2B_Ethernet3 | routed | - | 172.31.155.26/31 | default | 1500 | false | - | - |
+| Ethernet7 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet4 | routed | - | 172.31.2.3/31 | default | 1500 | false | - | - |
+| Ethernet8 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet4 | routed | - | 172.31.2.131/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
-interface Ethernet1
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7
-   no shutdown
-   mtu 1500
-   no switchport
-   ip address 172.31.1.0/31
-!
 interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF1A_Ethernet3
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.1.2/31
+   ip address 172.31.155.2/31
 !
 interface Ethernet3
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF1B_Ethernet3
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.2.0/31
+   ip address 172.31.155.10/31
 !
 interface Ethernet4
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF2A_Ethernet3
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.2.2/31
+   ip address 172.31.155.18/31
+!
+interface Ethernet5
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF2B_Ethernet3
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.155.26/31
+!
+interface Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet4
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.2.3/31
+!
+interface Ethernet8
+   description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet4
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.2.131/31
 ```
 
 ## Loopback Interfaces
@@ -269,7 +287,7 @@ interface Ethernet4
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | default | 192.168.100.1/32 |
+| Loopback0 | EVPN_Overlay_Peering | default | 192.168.155.2/32 |
 
 #### IPv6
 
@@ -285,7 +303,7 @@ interface Ethernet4
 interface Loopback0
    description EVPN_Overlay_Peering
    no shutdown
-   ip address 192.168.100.1/32
+   ip address 192.168.155.2/32
 ```
 
 # Routing
@@ -337,7 +355,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65001|  192.168.100.1 |
+| 65200|  192.168.155.2 |
 
 | BGP Tuning |
 | ---------- |
@@ -348,6 +366,18 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | maximum-paths 4 ecmp 4 |
 
 ### Router BGP Peer Groups
+
+#### EVPN-OVERLAY-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | evpn |
+| Next-hop unchanged | True |
+| Source | Loopback0 |
+| Bfd | true |
+| Ebgp multihop | 3 |
+| Send community | all |
+| Maximum routes | 0 (no limit) |
 
 #### IPv4-UNDERLAY-PEERS
 
@@ -361,10 +391,18 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
-| 172.31.1.1 | 65100 | default |
-| 172.31.1.3 | 65100 | default |
-| 172.31.2.1 | 65200 | default |
-| 172.31.2.3 | 65200 | default |
+| 172.31.2.2 | 65001 | default |
+| 172.31.2.130 | 65001 | default |
+| 172.31.155.3 | 65101 | default |
+| 172.31.155.11 | 65101 | default |
+| 172.31.155.19 | 65102 | default |
+| 172.31.155.27 | 65102 | default |
+| 192.168.100.1 | 65001 | default |
+| 192.168.100.2 | 65001 | default |
+| 192.168.155.5 | 65101 | default |
+| 192.168.155.6 | 65101 | default |
+| 192.168.155.7 | 65102 | default |
+| 192.168.155.8 | 65102 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -376,29 +414,85 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 ```eos
 !
-router bgp 65001
-   router-id 192.168.100.1
+router bgp 65200
+   router-id 192.168.155.2
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
    graceful-restart
    maximum-paths 4 ecmp 4
+   neighbor EVPN-OVERLAY-PEERS peer group
+   neighbor EVPN-OVERLAY-PEERS next-hop-unchanged
+   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
+   neighbor EVPN-OVERLAY-PEERS bfd
+   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
+   neighbor EVPN-OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==
+   neighbor EVPN-OVERLAY-PEERS send-community
+   neighbor EVPN-OVERLAY-PEERS maximum-routes 0
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
-   neighbor 172.31.1.1 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.1 remote-as 65100
-   neighbor 172.31.1.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.3 remote-as 65100
-   neighbor 172.31.2.1 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.2.1 remote-as 65200
-   neighbor 172.31.2.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.2.3 remote-as 65200
+   neighbor 172.31.2.2 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.2 remote-as 65001
+   neighbor 172.31.2.130 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.2.130 remote-as 65001
+   neighbor 172.31.155.3 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.3 remote-as 65101
+   neighbor 172.31.155.3 description EMEA_NORTH_02_LEAF1A_Ethernet2
+   neighbor 172.31.155.11 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.11 remote-as 65101
+   neighbor 172.31.155.11 description EMEA_NORTH_02_LEAF1B_Ethernet3
+   neighbor 172.31.155.19 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.19 remote-as 65102
+   neighbor 172.31.155.19 description EMEA_NORTH_02_LEAF2A_Ethernet4
+   neighbor 172.31.155.27 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.27 remote-as 65102
+   neighbor 172.31.155.27 description EMEA_NORTH_02_LEAF2B_Ethernet5
+   neighbor 192.168.100.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.100.1 remote-as 65001
+   neighbor 192.168.100.1 description EMEA_NORTH_SUPERSPINE1
+   neighbor 192.168.100.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.100.2 remote-as 65001
+   neighbor 192.168.100.2 description EMEA_NORTH_SUPERSPINE2
+   neighbor 192.168.155.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.5 remote-as 65101
+   neighbor 192.168.155.5 description EMEA_NORTH_02_LEAF1A
+   neighbor 192.168.155.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.6 remote-as 65101
+   neighbor 192.168.155.6 description EMEA_NORTH_02_LEAF1B
+   neighbor 192.168.155.7 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.7 remote-as 65102
+   neighbor 192.168.155.7 description EMEA_NORTH_02_LEAF2A
+   neighbor 192.168.155.8 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.8 remote-as 65102
+   neighbor 192.168.155.8 description EMEA_NORTH_02_LEAF2B
    redistribute connected route-map RM-CONN-2-BGP
    !
+   address-family evpn
+      neighbor EVPN-OVERLAY-PEERS activate
+   !
    address-family ipv4
+      no neighbor EVPN-OVERLAY-PEERS activate
       neighbor IPv4-UNDERLAY-PEERS activate
+```
+
+# BFD
+
+## Router BFD
+
+### Router BFD Multihop Summary
+
+| Interval | Minimum RX | Multiplier |
+| -------- | ---------- | ---------- |
+| 1200 | 1200 | 3 |
+
+### Router BFD Multihop Device Configuration
+
+```eos
+!
+router bfd
+   multihop interval 1200 min-rx 1200 multiplier 3
 ```
 
 # Multicast
@@ -413,14 +507,14 @@ router bgp 65001
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 192.168.100.0/24 eq 32 |
+| 10 | permit 192.168.155.0/24 eq 32 |
 
 ### Prefix-lists Device Configuration
 
 ```eos
 !
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 192.168.100.0/24 eq 32
+   seq 10 permit 192.168.155.0/24 eq 32
 ```
 
 ## Route-maps

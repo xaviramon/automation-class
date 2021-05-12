@@ -171,7 +171,7 @@ management api http-commands
 ```eos
 !
 username admin privilege 15 role network-admin nopassword
-username alumne privilege 15 role network-admin secret sha512 < Provide SHA512 HASH for password >
+username alumne privilege 15 role network-admin secret sha512 THISISATEST
 ```
 
 ## RADIUS Servers

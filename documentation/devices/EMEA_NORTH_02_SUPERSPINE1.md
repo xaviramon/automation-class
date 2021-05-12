@@ -1,4 +1,4 @@
-# EMEA_NORTH_01_SUPERSPINE1
+# EMEA_NORTH_02_SUPERSPINE1
 # Table of Contents
 <!-- toc -->
 
@@ -47,7 +47,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | MGMT | 192.168.0.1/24 | 192.168.0.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.1.1/24 | 192.168.0.1 |
 
 #### IPv6
 
@@ -63,7 +63,7 @@ interface Management1
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 192.168.0.1/24
+   ip address 192.168.1.1/24
 ```
 
 ## DNS Domain

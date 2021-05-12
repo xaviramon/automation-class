@@ -4,6 +4,10 @@ all:
       children:
         EMEA_NORTH:
           children:
+            EMEA_NORTH_SUPERSPINES:
+              hosts:
+                EMEA_NORTH_SUPERSPINE1:
+                EMEA_NORTH_SUPERSPINE2:
             EMEA_NORTH_01:
               children:
                 EMEA_NORTH_01_SPINES:
@@ -20,12 +24,30 @@ all:
                       hosts:
                         EMEA_NORTH_01_LEAF2A:
                         EMEA_NORTH_01_LEAF2B:
+            EMEA_NORTH_02:
+              children:
+                EMEA_NORTH_02_SPINES:
+                  hosts:
+                    EMEA_NORTH_02_SPINE1:
+                    EMEA_NORTH_02_SPINE2:
+                EMEA_NORTH_02_L3LEAFS:
+                  children:
+                    EMEA_NORTH_02_LEAF1:
+                      hosts:
+                        EMEA_NORTH_02_LEAF1A:
+                        EMEA_NORTH_02_LEAF1B:
+                    EMEA_NORTH_02_LEAF2:
+                      hosts:
+                        EMEA_NORTH_02_LEAF2A:
+                        EMEA_NORTH_02_LEAF2B:
         TENANTS_NETWORKS:
           children:
             EMEA_NORTH_01_L3LEAFS:
+            EMEA_NORTH_02_L3LEAFS:
         SERVERS:
           children:
             EMEA_NORTH_01_L3LEAFS:
+            EMEA_NORTH_02_L3LEAFS:
       vars:
         ansible_host: 10.83.28.162
         ansible_connection: httpapi
