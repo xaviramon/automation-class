@@ -415,12 +415,16 @@ router bgp 65001
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor 172.31.1.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.1 remote-as 65100
+   neighbor 172.31.1.1 description EMEA_NORTH_01_SPINE1_Ethernet7
    neighbor 172.31.1.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.3 remote-as 65100
+   neighbor 172.31.1.3 description EMEA_NORTH_01_SPINE2_Ethernet7
    neighbor 172.31.2.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.1 remote-as 65200
+   neighbor 172.31.2.1 description EMEA_NORTH_02_SPINE1_Ethernet7
    neighbor 172.31.2.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.3 remote-as 65200
+   neighbor 172.31.2.3 description EMEA_NORTH_02_SPINE2_Ethernet7
    neighbor 192.168.155.1 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.155.1 remote-as 65200
    neighbor 192.168.155.1 description EMEA_NORTH_02_SPINE1

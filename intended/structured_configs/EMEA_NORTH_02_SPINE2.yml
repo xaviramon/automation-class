@@ -35,7 +35,7 @@ router_bgp:
     172.31.155.3:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65101
-      description: EMEA_NORTH_02_LEAF1A_Ethernet2
+      description: EMEA_NORTH_02_LEAF1A_Ethernet3
     172.31.155.11:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65101
@@ -43,17 +43,19 @@ router_bgp:
     172.31.155.19:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65102
-      description: EMEA_NORTH_02_LEAF2A_Ethernet4
+      description: EMEA_NORTH_02_LEAF2A_Ethernet3
     172.31.155.27:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65102
-      description: EMEA_NORTH_02_LEAF2B_Ethernet5
+      description: EMEA_NORTH_02_LEAF2B_Ethernet3
     172.31.2.2:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65001
+      description: EMEA_NORTH_SUPERSPINE1_Ethernet4
     172.31.2.130:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65001
+      description: EMEA_NORTH_SUPERSPINE2_Ethernet4
     192.168.155.5:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_02_LEAF1A

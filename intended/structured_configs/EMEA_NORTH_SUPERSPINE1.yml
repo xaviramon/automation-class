@@ -35,15 +35,19 @@ router_bgp:
     172.31.1.1:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
+      description: EMEA_NORTH_01_SPINE1_Ethernet7
     172.31.1.3:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
+      description: EMEA_NORTH_01_SPINE2_Ethernet7
     172.31.2.1:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
+      description: EMEA_NORTH_02_SPINE1_Ethernet7
     172.31.2.3:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
+      description: EMEA_NORTH_02_SPINE2_Ethernet7
     192.168.255.1:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_SPINE1

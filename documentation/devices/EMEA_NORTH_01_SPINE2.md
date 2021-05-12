@@ -435,20 +435,22 @@ router bgp 65100
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor 172.31.1.2 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.2 remote-as 65001
+   neighbor 172.31.1.2 description EMEA_NORTH_SUPERSPINE1_Ethernet2
    neighbor 172.31.1.130 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.130 remote-as 65001
+   neighbor 172.31.1.130 description EMEA_NORTH_SUPERSPINE2_Ethernet2
    neighbor 172.31.255.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.3 remote-as 65101
-   neighbor 172.31.255.3 description EMEA_NORTH_01_LEAF1A_Ethernet2
+   neighbor 172.31.255.3 description EMEA_NORTH_01_LEAF1A_Ethernet3
    neighbor 172.31.255.11 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.11 remote-as 65101
    neighbor 172.31.255.11 description EMEA_NORTH_01_LEAF1B_Ethernet3
    neighbor 172.31.255.19 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.19 remote-as 65102
-   neighbor 172.31.255.19 description EMEA_NORTH_01_LEAF2A_Ethernet4
+   neighbor 172.31.255.19 description EMEA_NORTH_01_LEAF2A_Ethernet3
    neighbor 172.31.255.27 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.27 remote-as 65102
-   neighbor 172.31.255.27 description EMEA_NORTH_01_LEAF2B_Ethernet5
+   neighbor 172.31.255.27 description EMEA_NORTH_01_LEAF2B_Ethernet3
    neighbor 192.168.100.1 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.100.1 remote-as 65001
    neighbor 192.168.100.1 description EMEA_NORTH_SUPERSPINE1
