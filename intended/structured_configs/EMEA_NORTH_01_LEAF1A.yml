@@ -44,10 +44,10 @@ router_bgp:
       description: EMEA_NORTH_01_LEAF1B
     172.31.255.0:
       peer_group: IPv4-UNDERLAY-PEERS
-      description: EMEA_NORTH_01_SPINE1_Ethernet2
+      description: EMEA_NORTH_01_SPINE1_Ethernet1
     172.31.255.2:
       peer_group: IPv4-UNDERLAY-PEERS
-      description: EMEA_NORTH_01_SPINE2_Ethernet2
+      description: EMEA_NORTH_01_SPINE2_Ethernet1
     192.168.255.1:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_SPINE1
@@ -496,8 +496,8 @@ vlan_interfaces:
     ip_address: 10.255.254.0/31
     mtu: 1500
 port_channel_interfaces:
-  Port-Channel1:
-    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Po1
+  Port-Channel12:
+    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Po12
     type: switched
     shutdown: false
     vlans: 2-4094
@@ -513,40 +513,40 @@ port_channel_interfaces:
     vlans: 110-119,120-130,160-161
     mlag: 4
 ethernet_interfaces:
-  Ethernet1:
+  Ethernet12:
     peer: EMEA_NORTH_01_LEAF1B
-    peer_interface: Ethernet1
+    peer_interface: Ethernet12
     peer_type: mlag_peer
-    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet1
+    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet12
     type: switched
     shutdown: false
     channel_group:
-      id: 1
+      id: 12
       mode: active
-  Ethernet6:
+  Ethernet13:
     peer: EMEA_NORTH_01_LEAF1B
-    peer_interface: Ethernet6
+    peer_interface: Ethernet13
     peer_type: mlag_peer
-    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet6
+    description: MLAG_PEER_EMEA_NORTH_01_LEAF1B_Ethernet13
     type: switched
     shutdown: false
     channel_group:
-      id: 1
+      id: 12
       mode: active
-  Ethernet2:
+  Ethernet10:
     peer: EMEA_NORTH_01_SPINE1
-    peer_interface: Ethernet2
+    peer_interface: Ethernet1
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet2
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet1
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.255.1/31
-  Ethernet3:
+  Ethernet11:
     peer: EMEA_NORTH_01_SPINE2
-    peer_interface: Ethernet2
+    peer_interface: Ethernet1
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet2
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet1
     mtu: 1500
     type: routed
     shutdown: false
@@ -568,7 +568,7 @@ mlag_configuration:
   domain_id: EMEA_NORTH_01_LEAF1
   local_interface: Vlan4094
   peer_address: 10.255.252.1
-  peer_link: Port-Channel1
+  peer_link: Port-Channel12
   reload_delay_mlag: 300
   reload_delay_non_mlag: 330
 route_maps:

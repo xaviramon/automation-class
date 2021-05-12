@@ -197,7 +197,7 @@ radius-server host 192.168.0.1 key 7 0207165218120E
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| EMEA_NORTH_01_LEAF2 | Vlan4094 | 10.255.252.4 | Port-Channel1 |
+| EMEA_NORTH_01_LEAF2 | Vlan4094 | 10.255.252.4 | Port-Channel12 |
 
 Dual primary detection is disabled.
 
@@ -209,7 +209,7 @@ mlag configuration
    domain-id EMEA_NORTH_01_LEAF2
    local-interface Vlan4094
    peer-address 10.255.252.4
-   peer-link Port-Channel1
+   peer-link Port-Channel12
    reload-delay mlag 300
    reload-delay non-mlag 330
 ```
@@ -372,8 +372,8 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet1 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
-| Ethernet6 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
+| Ethernet12 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet12 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
+| Ethernet13 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet13 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
 
 *Inherited from Port-Channel Interface
 
@@ -381,36 +381,36 @@ vlan 4094
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet5 | routed | - | 172.31.255.25/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet5 | routed | - | 172.31.255.27/31 | default | 1500 | false | - | - |
+| Ethernet10 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet4 | routed | - | 172.31.255.25/31 | default | 1500 | false | - | - |
+| Ethernet11 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet4 | routed | - | 172.31.255.27/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
-interface Ethernet1
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet1
-   no shutdown
-   channel-group 1 mode active
-!
-interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet5
+interface Ethernet10
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet4
    no shutdown
    mtu 1500
    no switchport
    ip address 172.31.255.25/31
 !
-interface Ethernet3
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet5
+interface Ethernet11
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet4
    no shutdown
    mtu 1500
    no switchport
    ip address 172.31.255.27/31
 !
-interface Ethernet6
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet6
+interface Ethernet12
+   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet12
    no shutdown
-   channel-group 1 mode active
+   channel-group 12 mode active
+!
+interface Ethernet13
+   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Ethernet13
+   no shutdown
+   channel-group 12 mode active
 ```
 
 ## Port-Channel Interfaces
@@ -421,14 +421,14 @@ interface Ethernet6
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Po1 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
+| Port-Channel12 | MLAG_PEER_EMEA_NORTH_01_LEAF2A_Po12 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 
 ### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
-interface Port-Channel1
-   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Po1
+interface Port-Channel12
+   description MLAG_PEER_EMEA_NORTH_01_LEAF2A_Po12
    no shutdown
    switchport
    switchport trunk allowed vlan 2-4094
@@ -942,9 +942,9 @@ router bgp 65102
    neighbor 10.255.254.4 peer group MLAG-IPv4-UNDERLAY-PEER
    neighbor 10.255.254.4 description EMEA_NORTH_01_LEAF2A
    neighbor 172.31.255.24 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.24 description EMEA_NORTH_01_SPINE1_Ethernet5
+   neighbor 172.31.255.24 description EMEA_NORTH_01_SPINE1_Ethernet4
    neighbor 172.31.255.26 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.255.26 description EMEA_NORTH_01_SPINE2_Ethernet5
+   neighbor 172.31.255.26 description EMEA_NORTH_01_SPINE2_Ethernet4
    neighbor 192.168.255.1 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.255.1 remote-as 65100
    neighbor 192.168.255.1 description EMEA_NORTH_01_SPINE1

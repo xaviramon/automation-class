@@ -35,19 +35,19 @@ router_bgp:
     172.31.1.1:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
-      description: EMEA_NORTH_01_SPINE1_Ethernet7
+      description: EMEA_NORTH_01_SPINE1_Ethernet10
     172.31.1.3:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
-      description: EMEA_NORTH_01_SPINE2_Ethernet7
+      description: EMEA_NORTH_01_SPINE2_Ethernet10
     172.31.2.1:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
-      description: EMEA_NORTH_02_SPINE1_Ethernet7
+      description: EMEA_NORTH_02_SPINE1_Ethernet10
     172.31.2.3:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
-      description: EMEA_NORTH_02_SPINE2_Ethernet7
+      description: EMEA_NORTH_02_SPINE2_Ethernet10
     192.168.255.1:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_SPINE1
@@ -122,36 +122,36 @@ loopback_interfaces:
 ethernet_interfaces:
   Ethernet1:
     peer: EMEA_NORTH_01_SPINE1
-    peer_interface: Ethernet7
+    peer_interface: Ethernet10
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet10
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.1.0/31
   Ethernet2:
     peer: EMEA_NORTH_01_SPINE2
-    peer_interface: Ethernet7
+    peer_interface: Ethernet10
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet10
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.1.2/31
   Ethernet3:
     peer: EMEA_NORTH_02_SPINE1
-    peer_interface: Ethernet7
+    peer_interface: Ethernet10
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7
+    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet10
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.2.0/31
   Ethernet4:
     peer: EMEA_NORTH_02_SPINE2
-    peer_interface: Ethernet7
+    peer_interface: Ethernet10
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7
+    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet10
     mtu: 1500
     type: routed
     shutdown: false

@@ -7,7 +7,7 @@ super_spine:
   platform: vEOS-LAB  # super-spine platform
   bgp_as: 65001
   spine_interfaces:
-    - [ Ethernet7, Ethernet8 ]
+    - [ Ethernet20, Ethernet21 ]
     #- [ Ethernet7, Ethernet8, Ethernet9, Ethernet10 ]
   nodes:
     EMEA_NORTH_SUPERSPINE1:  # super-spine name

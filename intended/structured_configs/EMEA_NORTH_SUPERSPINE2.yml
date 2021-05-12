@@ -35,19 +35,19 @@ router_bgp:
     172.31.1.129:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
-      description: EMEA_NORTH_01_SPINE1_Ethernet8
+      description: EMEA_NORTH_01_SPINE1_Ethernet11
     172.31.1.131:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65100
-      description: EMEA_NORTH_01_SPINE2_Ethernet8
+      description: EMEA_NORTH_01_SPINE2_Ethernet11
     172.31.2.129:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
-      description: EMEA_NORTH_02_SPINE1_Ethernet8
+      description: EMEA_NORTH_02_SPINE1_Ethernet11
     172.31.2.131:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: 65200
-      description: EMEA_NORTH_02_SPINE2_Ethernet8
+      description: EMEA_NORTH_02_SPINE2_Ethernet11
     192.168.255.1:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_SPINE1
@@ -122,36 +122,36 @@ loopback_interfaces:
 ethernet_interfaces:
   Ethernet1:
     peer: EMEA_NORTH_01_SPINE1
-    peer_interface: Ethernet8
+    peer_interface: Ethernet11
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet8
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet11
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.1.128/31
   Ethernet2:
     peer: EMEA_NORTH_01_SPINE2
-    peer_interface: Ethernet8
+    peer_interface: Ethernet11
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet8
+    description: P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet11
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.1.130/31
   Ethernet3:
     peer: EMEA_NORTH_02_SPINE1
-    peer_interface: Ethernet8
+    peer_interface: Ethernet11
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet8
+    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet11
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.2.128/31
   Ethernet4:
     peer: EMEA_NORTH_02_SPINE2
-    peer_interface: Ethernet8
+    peer_interface: Ethernet11
     peer_type: spine
-    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet8
+    description: P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet11
     mtu: 1500
     type: routed
     shutdown: false

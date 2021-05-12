@@ -197,7 +197,7 @@ radius-server host 192.168.0.1 key 7 0207165218120E
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| EMEA_NORTH_02_LEAF1 | Vlan4094 | 10.255.252.1 | Port-Channel1 |
+| EMEA_NORTH_02_LEAF1 | Vlan4094 | 10.255.252.1 | Port-Channel12 |
 
 Dual primary detection is disabled.
 
@@ -209,7 +209,7 @@ mlag configuration
    domain-id EMEA_NORTH_02_LEAF1
    local-interface Vlan4094
    peer-address 10.255.252.1
-   peer-link Port-Channel1
+   peer-link Port-Channel12
    reload-delay mlag 300
    reload-delay non-mlag 330
 ```
@@ -355,8 +355,8 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet1 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
-| Ethernet6 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet6 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
+| Ethernet12 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet12 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
+| Ethernet13 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet13 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 12 |
 
 *Inherited from Port-Channel Interface
 
@@ -370,11 +370,6 @@ vlan 4094
 ### Ethernet Interfaces Device Configuration
 
 ```eos
-!
-interface Ethernet1
-   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet1
-   no shutdown
-   channel-group 1 mode active
 !
 interface Ethernet2
    description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet2
@@ -390,10 +385,15 @@ interface Ethernet3
    no switchport
    ip address 172.31.155.3/31
 !
-interface Ethernet6
-   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet6
+interface Ethernet12
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet12
    no shutdown
-   channel-group 1 mode active
+   channel-group 12 mode active
+!
+interface Ethernet13
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Ethernet13
+   no shutdown
+   channel-group 12 mode active
 ```
 
 ## Port-Channel Interfaces
@@ -404,14 +404,14 @@ interface Ethernet6
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po1 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
+| Port-Channel12 | MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po12 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 
 ### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
-interface Port-Channel1
-   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po1
+interface Port-Channel12
+   description MLAG_PEER_EMEA_NORTH_02_LEAF1B_Po12
    no shutdown
    switchport
    switchport trunk allowed vlan 2-4094
@@ -753,7 +753,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65101|  192.168.155.5 |
+| 65201|  192.168.155.5 |
 
 | BGP Tuning |
 | ---------- |
@@ -790,7 +790,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| Remote AS | 65101 |
+| Remote AS | 65201 |
 | Next-hop self | True |
 | Send community | all |
 | Maximum routes | 12000 |
@@ -844,7 +844,7 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 ```eos
 !
-router bgp 65101
+router bgp 65201
    router-id 192.168.155.5
    no bgp default ipv4-unicast
    distance bgp 20 200 200
@@ -864,7 +864,7 @@ router bgp 65101
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER peer group
-   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65101
+   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65201
    neighbor MLAG-IPv4-UNDERLAY-PEER next-hop-self
    neighbor MLAG-IPv4-UNDERLAY-PEER password 7 vnEaG8gMeQf3d3cN6PktXQ==
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community

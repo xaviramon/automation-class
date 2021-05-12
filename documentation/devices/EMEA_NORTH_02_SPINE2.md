@@ -229,8 +229,9 @@ vlan internal order ascending range 1006 1199
 | Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_LEAF1B_Ethernet3 | routed | - | 172.31.155.10/31 | default | 1500 | false | - | - |
 | Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_LEAF2A_Ethernet3 | routed | - | 172.31.155.18/31 | default | 1500 | false | - | - |
 | Ethernet5 | P2P_LINK_TO_EMEA_NORTH_02_LEAF2B_Ethernet3 | routed | - | 172.31.155.26/31 | default | 1500 | false | - | - |
-| Ethernet7 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet4 | routed | - | 172.31.2.3/31 | default | 1500 | false | - | - |
-| Ethernet8 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet4 | routed | - | 172.31.2.131/31 | default | 1500 | false | - | - |
+| Ethernet9 | P2P_LINK_TO_EMEA_NORTH_02_LEAF3A_Ethernet3 | routed | - | 172.31.155.34/31 | default | 1500 | false | - | - |
+| Ethernet10 | P2P_LINK_TO_EMEA_NORTH_02_LEAF3B_Ethernet3 | routed | - | 172.31.155.42/31 | default | 1500 | false | - | - |
+| Ethernet11 | P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet4 | routed | - | 172.31.2.131/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
@@ -264,14 +265,21 @@ interface Ethernet5
    no switchport
    ip address 172.31.155.26/31
 !
-interface Ethernet7
-   description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE1_Ethernet4
+interface Ethernet9
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF3A_Ethernet3
    no shutdown
    mtu 1500
    no switchport
-   ip address 172.31.2.3/31
+   ip address 172.31.155.34/31
 !
-interface Ethernet8
+interface Ethernet10
+   description P2P_LINK_TO_EMEA_NORTH_02_LEAF3B_Ethernet3
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.155.42/31
+!
+interface Ethernet11
    description P2P_LINK_TO_EMEA_NORTH_SUPERSPINE2_Ethernet4
    no shutdown
    mtu 1500
@@ -391,18 +399,21 @@ ip route vrf MGMT 0.0.0.0/0 192.168.0.1
 
 | Neighbor | Remote AS | VRF |
 | -------- | --------- | --- |
-| 172.31.2.2 | 65001 | default |
 | 172.31.2.130 | 65001 | default |
-| 172.31.155.3 | 65101 | default |
-| 172.31.155.11 | 65101 | default |
-| 172.31.155.19 | 65102 | default |
-| 172.31.155.27 | 65102 | default |
+| 172.31.155.3 | 65201 | default |
+| 172.31.155.11 | 65201 | default |
+| 172.31.155.19 | 65202 | default |
+| 172.31.155.27 | 65202 | default |
+| 172.31.155.35 | 65203 | default |
+| 172.31.155.43 | 65203 | default |
 | 192.168.100.1 | 65001 | default |
 | 192.168.100.2 | 65001 | default |
-| 192.168.155.5 | 65101 | default |
-| 192.168.155.6 | 65101 | default |
-| 192.168.155.7 | 65102 | default |
-| 192.168.155.8 | 65102 | default |
+| 192.168.155.5 | 65201 | default |
+| 192.168.155.6 | 65201 | default |
+| 192.168.155.7 | 65202 | default |
+| 192.168.155.8 | 65202 | default |
+| 192.168.155.9 | 65203 | default |
+| 192.168.155.10 | 65203 | default |
 
 ### Router BGP EVPN Address Family
 
@@ -433,24 +444,27 @@ router bgp 65200
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
-   neighbor 172.31.2.2 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.2.2 remote-as 65001
-   neighbor 172.31.2.2 description EMEA_NORTH_SUPERSPINE1_Ethernet4
    neighbor 172.31.2.130 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.130 remote-as 65001
    neighbor 172.31.2.130 description EMEA_NORTH_SUPERSPINE2_Ethernet4
    neighbor 172.31.155.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.155.3 remote-as 65101
+   neighbor 172.31.155.3 remote-as 65201
    neighbor 172.31.155.3 description EMEA_NORTH_02_LEAF1A_Ethernet3
    neighbor 172.31.155.11 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.155.11 remote-as 65101
+   neighbor 172.31.155.11 remote-as 65201
    neighbor 172.31.155.11 description EMEA_NORTH_02_LEAF1B_Ethernet3
    neighbor 172.31.155.19 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.155.19 remote-as 65102
+   neighbor 172.31.155.19 remote-as 65202
    neighbor 172.31.155.19 description EMEA_NORTH_02_LEAF2A_Ethernet3
    neighbor 172.31.155.27 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.155.27 remote-as 65102
+   neighbor 172.31.155.27 remote-as 65202
    neighbor 172.31.155.27 description EMEA_NORTH_02_LEAF2B_Ethernet3
+   neighbor 172.31.155.35 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.35 remote-as 65203
+   neighbor 172.31.155.35 description EMEA_NORTH_02_LEAF3A_Ethernet3
+   neighbor 172.31.155.43 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.155.43 remote-as 65203
+   neighbor 172.31.155.43 description EMEA_NORTH_02_LEAF3B_Ethernet3
    neighbor 192.168.100.1 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.100.1 remote-as 65001
    neighbor 192.168.100.1 description EMEA_NORTH_SUPERSPINE1
@@ -458,17 +472,23 @@ router bgp 65200
    neighbor 192.168.100.2 remote-as 65001
    neighbor 192.168.100.2 description EMEA_NORTH_SUPERSPINE2
    neighbor 192.168.155.5 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.155.5 remote-as 65101
+   neighbor 192.168.155.5 remote-as 65201
    neighbor 192.168.155.5 description EMEA_NORTH_02_LEAF1A
    neighbor 192.168.155.6 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.155.6 remote-as 65101
+   neighbor 192.168.155.6 remote-as 65201
    neighbor 192.168.155.6 description EMEA_NORTH_02_LEAF1B
    neighbor 192.168.155.7 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.155.7 remote-as 65102
+   neighbor 192.168.155.7 remote-as 65202
    neighbor 192.168.155.7 description EMEA_NORTH_02_LEAF2A
    neighbor 192.168.155.8 peer group EVPN-OVERLAY-PEERS
-   neighbor 192.168.155.8 remote-as 65102
+   neighbor 192.168.155.8 remote-as 65202
    neighbor 192.168.155.8 description EMEA_NORTH_02_LEAF2B
+   neighbor 192.168.155.9 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.9 remote-as 65203
+   neighbor 192.168.155.9 description EMEA_NORTH_02_LEAF3A
+   neighbor 192.168.155.10 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.155.10 remote-as 65203
+   neighbor 192.168.155.10 description EMEA_NORTH_02_LEAF3B
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn

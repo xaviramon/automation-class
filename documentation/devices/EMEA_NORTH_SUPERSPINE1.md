@@ -225,38 +225,38 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7 | routed | - | 172.31.1.0/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7 | routed | - | 172.31.1.2/31 | default | 1500 | false | - | - |
-| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7 | routed | - | 172.31.2.0/31 | default | 1500 | false | - | - |
-| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7 | routed | - | 172.31.2.2/31 | default | 1500 | false | - | - |
+| Ethernet1 | P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet10 | routed | - | 172.31.1.0/31 | default | 1500 | false | - | - |
+| Ethernet2 | P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet10 | routed | - | 172.31.1.2/31 | default | 1500 | false | - | - |
+| Ethernet3 | P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet10 | routed | - | 172.31.2.0/31 | default | 1500 | false | - | - |
+| Ethernet4 | P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet10 | routed | - | 172.31.2.2/31 | default | 1500 | false | - | - |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE1_Ethernet10
    no shutdown
    mtu 1500
    no switchport
    ip address 172.31.1.0/31
 !
 interface Ethernet2
-   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_01_SPINE2_Ethernet10
    no shutdown
    mtu 1500
    no switchport
    ip address 172.31.1.2/31
 !
 interface Ethernet3
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE1_Ethernet10
    no shutdown
    mtu 1500
    no switchport
    ip address 172.31.2.0/31
 !
 interface Ethernet4
-   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet7
+   description P2P_LINK_TO_EMEA_NORTH_02_SPINE2_Ethernet10
    no shutdown
    mtu 1500
    no switchport
@@ -415,16 +415,16 @@ router bgp 65001
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor 172.31.1.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.1 remote-as 65100
-   neighbor 172.31.1.1 description EMEA_NORTH_01_SPINE1_Ethernet7
+   neighbor 172.31.1.1 description EMEA_NORTH_01_SPINE1_Ethernet10
    neighbor 172.31.1.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.1.3 remote-as 65100
-   neighbor 172.31.1.3 description EMEA_NORTH_01_SPINE2_Ethernet7
+   neighbor 172.31.1.3 description EMEA_NORTH_01_SPINE2_Ethernet10
    neighbor 172.31.2.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.1 remote-as 65200
-   neighbor 172.31.2.1 description EMEA_NORTH_02_SPINE1_Ethernet7
+   neighbor 172.31.2.1 description EMEA_NORTH_02_SPINE1_Ethernet10
    neighbor 172.31.2.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.2.3 remote-as 65200
-   neighbor 172.31.2.3 description EMEA_NORTH_02_SPINE2_Ethernet7
+   neighbor 172.31.2.3 description EMEA_NORTH_02_SPINE2_Ethernet10
    neighbor 192.168.155.1 peer group EVPN-OVERLAY-PEERS
    neighbor 192.168.155.1 remote-as 65200
    neighbor 192.168.155.1 description EMEA_NORTH_02_SPINE1

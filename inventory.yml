@@ -24,6 +24,10 @@ all:
                       hosts:
                         EMEA_NORTH_01_LEAF2A:
                         EMEA_NORTH_01_LEAF2B:
+                    EMEA_NORTH_01_LEAF3:
+                      hosts:
+                        EMEA_NORTH_01_LEAF3A:
+                        EMEA_NORTH_01_LEAF3B:
             EMEA_NORTH_02:
               children:
                 EMEA_NORTH_02_SPINES:
@@ -40,6 +44,10 @@ all:
                       hosts:
                         EMEA_NORTH_02_LEAF2A:
                         EMEA_NORTH_02_LEAF2B:
+                    EMEA_NORTH_02_LEAF3:
+                      hosts:
+                        EMEA_NORTH_02_LEAF3A:
+                        EMEA_NORTH_02_LEAF3B:
         TENANTS_NETWORKS:
           children:
             EMEA_NORTH_01_L3LEAFS:

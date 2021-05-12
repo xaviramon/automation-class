@@ -1,5 +1,5 @@
 router_bgp:
-  as: 65102
+  as: 65202
   router_id: 192.168.155.7
   bgp_defaults:
   - no bgp default ipv4-unicast
@@ -10,7 +10,7 @@ router_bgp:
   peer_groups:
     MLAG-IPv4-UNDERLAY-PEER:
       type: ipv4
-      remote_as: 65102
+      remote_as: 65202
       next_hop_self: true
       password: vnEaG8gMeQf3d3cN6PktXQ==
       maximum_routes: 12000
@@ -596,8 +596,8 @@ vlan_interfaces:
     ip_address: 10.255.254.4/31
     mtu: 1500
 port_channel_interfaces:
-  Port-Channel1:
-    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Po1
+  Port-Channel12:
+    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Po12
     type: switched
     shutdown: false
     vlans: 2-4094
@@ -606,25 +606,25 @@ port_channel_interfaces:
     - LEAF_PEER_L3
     - MLAG
 ethernet_interfaces:
-  Ethernet1:
+  Ethernet12:
     peer: EMEA_NORTH_02_LEAF2B
-    peer_interface: Ethernet1
+    peer_interface: Ethernet12
     peer_type: mlag_peer
-    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet1
+    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet12
     type: switched
     shutdown: false
     channel_group:
-      id: 1
+      id: 12
       mode: active
-  Ethernet6:
+  Ethernet13:
     peer: EMEA_NORTH_02_LEAF2B
-    peer_interface: Ethernet6
+    peer_interface: Ethernet13
     peer_type: mlag_peer
-    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet6
+    description: MLAG_PEER_EMEA_NORTH_02_LEAF2B_Ethernet13
     type: switched
     shutdown: false
     channel_group:
-      id: 1
+      id: 12
       mode: active
   Ethernet2:
     peer: EMEA_NORTH_02_SPINE1
@@ -648,7 +648,7 @@ mlag_configuration:
   domain_id: EMEA_NORTH_02_LEAF2
   local_interface: Vlan4094
   peer_address: 10.255.252.5
-  peer_link: Port-Channel1
+  peer_link: Port-Channel12
   reload_delay_mlag: 300
   reload_delay_non_mlag: 330
 route_maps:
