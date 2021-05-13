@@ -19,12 +19,9 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- |
-| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF1A | 192.168.0.12/24 | vEOS-LAB | Provisioned |
-| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF1B | 192.168.0.13/24 | vEOS-LAB | Provisioned |
-| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF2A | 192.168.0.14/24 | vEOS-LAB | Provisioned |
-| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF2B | 192.168.0.15/24 | vEOS-LAB | Provisioned |
-| EMEA_NORTH_01 | spine | EMEA_NORTH_01_SPINE1 | 192.168.0.10/24 | vEOS-LAB | Provisioned |
-| EMEA_NORTH_01 | spine | EMEA_NORTH_01_SPINE2 | 192.168.0.11/24 | vEOS-LAB | Provisioned |
+| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF1A | 172.16.77.11/24 | vEOS-LAB | Provisioned |
+| EMEA_NORTH_01 | l3leaf | EMEA_NORTH_01_LEAF1B | 172.16.77.12/24 | vEOS-LAB | Provisioned |
+| EMEA_NORTH_01 | spine | EMEA_NORTH_01_SPINE1 | 172.16.77.21/24 | vEOS-LAB | Provisioned |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 
@@ -36,18 +33,9 @@
 
 | Type | Node | Node Interface | Peer Type | Peer Node | Peer Interface |
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
-| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet1 | mlag_peer | EMEA_NORTH_01_LEAF1B | Ethernet1 |
-| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet2 | spine | EMEA_NORTH_01_SPINE1 | Ethernet2 |
-| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet3 | spine | EMEA_NORTH_01_SPINE2 | Ethernet2 |
-| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet6 | mlag_peer | EMEA_NORTH_01_LEAF1B | Ethernet6 |
-| l3leaf | EMEA_NORTH_01_LEAF1B | Ethernet2 | spine | EMEA_NORTH_01_SPINE1 | Ethernet3 |
-| l3leaf | EMEA_NORTH_01_LEAF1B | Ethernet3 | spine | EMEA_NORTH_01_SPINE2 | Ethernet3 |
-| l3leaf | EMEA_NORTH_01_LEAF2A | Ethernet1 | mlag_peer | EMEA_NORTH_01_LEAF2B | Ethernet1 |
-| l3leaf | EMEA_NORTH_01_LEAF2A | Ethernet2 | spine | EMEA_NORTH_01_SPINE1 | Ethernet4 |
-| l3leaf | EMEA_NORTH_01_LEAF2A | Ethernet3 | spine | EMEA_NORTH_01_SPINE2 | Ethernet4 |
-| l3leaf | EMEA_NORTH_01_LEAF2A | Ethernet6 | mlag_peer | EMEA_NORTH_01_LEAF2B | Ethernet6 |
-| l3leaf | EMEA_NORTH_01_LEAF2B | Ethernet2 | spine | EMEA_NORTH_01_SPINE1 | Ethernet5 |
-| l3leaf | EMEA_NORTH_01_LEAF2B | Ethernet3 | spine | EMEA_NORTH_01_SPINE2 | Ethernet5 |
+| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet1 | spine | EMEA_NORTH_01_SPINE1 | Ethernet1 |
+| l3leaf | EMEA_NORTH_01_LEAF1A | Ethernet2 | mlag_peer | EMEA_NORTH_01_LEAF1B | Ethernet2 |
+| l3leaf | EMEA_NORTH_01_LEAF1B | Ethernet1 | spine | EMEA_NORTH_01_SPINE1 | Ethernet2 |
 
 # Fabric IP Allocation
 
@@ -55,26 +43,20 @@
 
 | P2P Summary | Available Addresses | Assigned addresses | Assigned Address % |
 | ----------- | ------------------- | ------------------ | ------------------ |
-| 172.31.250.0/24 | 256 | 16 | 6.25 % |
+| 172.31.255.0/24 | 256 | 4 | 1.57 % |
 
 ## Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| EMEA_NORTH_01_LEAF1A | Ethernet2 | 172.31.250.1/31 | EMEA_NORTH_01_SPINE1 | Ethernet2 | 172.31.250.0/31 |
-| EMEA_NORTH_01_LEAF1A | Ethernet3 | 172.31.250.3/31 | EMEA_NORTH_01_SPINE2 | Ethernet2 | 172.31.250.2/31 |
-| EMEA_NORTH_01_LEAF1B | Ethernet2 | 172.31.250.9/31 | EMEA_NORTH_01_SPINE1 | Ethernet3 | 172.31.250.8/31 |
-| EMEA_NORTH_01_LEAF1B | Ethernet3 | 172.31.250.11/31 | EMEA_NORTH_01_SPINE2 | Ethernet3 | 172.31.250.10/31 |
-| EMEA_NORTH_01_LEAF2A | Ethernet2 | 172.31.250.17/31 | EMEA_NORTH_01_SPINE1 | Ethernet4 | 172.31.250.16/31 |
-| EMEA_NORTH_01_LEAF2A | Ethernet3 | 172.31.250.19/31 | EMEA_NORTH_01_SPINE2 | Ethernet4 | 172.31.250.18/31 |
-| EMEA_NORTH_01_LEAF2B | Ethernet2 | 172.31.250.25/31 | EMEA_NORTH_01_SPINE1 | Ethernet5 | 172.31.250.24/31 |
-| EMEA_NORTH_01_LEAF2B | Ethernet3 | 172.31.250.27/31 | EMEA_NORTH_01_SPINE2 | Ethernet5 | 172.31.250.26/31 |
+| EMEA_NORTH_01_LEAF1A | Ethernet1 | 172.31.255.1/31 | EMEA_NORTH_01_SPINE1 | Ethernet1 | 172.31.255.0/31 |
+| EMEA_NORTH_01_LEAF1B | Ethernet1 | 172.31.255.9/31 | EMEA_NORTH_01_SPINE1 | Ethernet2 | 172.31.255.8/31 |
 
 ## Overlay Loopback Interfaces (BGP EVPN Peering)
 
 | Overlay Loopback Summary | Available Addresses | Assigned addresses | Assigned Address % |
 | ------------------------ | ------------------- | ------------------ | ------------------ |
-| 192.168.255.0/24 | 256 | 6 | 2.35 % |
+| 192.168.255.0/24 | 256 | 3 | 1.18 % |
 
 ## Loopback0 Interfaces Node Allocation
 
@@ -82,16 +64,13 @@
 | --- | ---- | --------- |
 | EMEA_NORTH_01 | EMEA_NORTH_01_LEAF1A | 192.168.255.5/32 |
 | EMEA_NORTH_01 | EMEA_NORTH_01_LEAF1B | 192.168.255.6/32 |
-| EMEA_NORTH_01 | EMEA_NORTH_01_LEAF2A | 192.168.255.7/32 |
-| EMEA_NORTH_01 | EMEA_NORTH_01_LEAF2B | 192.168.255.8/32 |
 | EMEA_NORTH_01 | EMEA_NORTH_01_SPINE1 | 192.168.255.1/32 |
-| EMEA_NORTH_01 | EMEA_NORTH_01_SPINE2 | 192.168.255.2/32 |
 
 ## VTEP Loopback VXLAN Tunnel Source Interfaces (Leafs Only)
 
 | VTEP Loopback Summary | Available Addresses | Assigned addresses | Assigned Address % |
 | --------------------- | ------------------- | ------------------ | ------------------ |
-| 192.168.254.0/24 | 256 | 4 | 1.57 % |
+| 192.168.254.0/24 | 256 | 2 | 0.79 % |
 
 ## VTEP Loopback Node allocation
 
@@ -99,5 +78,3 @@
 | --- | ---- | --------- |
 | EMEA_NORTH_01 | EMEA_NORTH_01_LEAF1A | 192.168.254.5/32 |
 | EMEA_NORTH_01 | EMEA_NORTH_01_LEAF1B | 192.168.254.5/32 |
-| EMEA_NORTH_01 | EMEA_NORTH_01_LEAF2A | 192.168.254.7/32 |
-| EMEA_NORTH_01 | EMEA_NORTH_01_LEAF2B | 192.168.254.7/32 |

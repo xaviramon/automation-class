@@ -31,11 +31,10 @@ local_users:
     role: network-admin
     no_password: true
 
-  # Username with a password
-  alumne:
+  automation:
     privilege: 15
     role: network-admin
-    sha512_password: "< Provide SHA512 HASH for password >"
+    sha512_password: "$6$GwtJUZjzqON23NQs$YLoJ4U5AkfF4MrN8Qdh9neGnRjXRsGCJeEUQHXreYSCGmNa7QVH1l/hU838ZewmZ0C.fdc3afOYHaCL6LaYkc0"
 
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1
@@ -52,7 +51,7 @@ name_servers:
 
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment VRF
 ntp_server:
-  local_interface: 
+  local_interface:
     interface: Management1
   nodes:
     - 192.168.0.1

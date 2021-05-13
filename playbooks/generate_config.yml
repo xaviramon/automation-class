@@ -1,6 +1,6 @@
 ---
 - name: Build Switch configuration
-  hosts: [ EMEA ]
+  hosts: [EMEA]
   connection: local
   gather_facts: false
   collections:
@@ -22,3 +22,8 @@
       tags: [build]
       import_role:
         name: arista.avd.eos_cli_config_gen
+
+    - name: Deploying config....
+      tags: [never, deploy]
+      import_role:
+        name: arista.avd.eos_config_deploy_eapi

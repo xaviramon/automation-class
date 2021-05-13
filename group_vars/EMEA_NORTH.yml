@@ -44,7 +44,7 @@ bgp_peer_groups:
     password: "vnEaG8gMeQf3d3cN6PktXQ=="
 
 # Update p2p mtu 9000 -> 1500
-p2p_uplinks_mtu: 1500
+p2p_uplinks_mtu: 1400
 
 # Adjust default bfd values
 bfd_multihop:

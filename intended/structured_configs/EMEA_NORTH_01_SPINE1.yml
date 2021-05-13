@@ -8,6 +8,11 @@ router_bgp:
   - graceful-restart
   - maximum-paths 4 ecmp 4
   peer_groups:
+    IPv4-UNDERLAY-PEERS:
+      type: ipv4
+      password: AQQvKeimxJu+uGQ/yYvv9w==
+      maximum_routes: 12000
+      send_community: all
     EVPN-OVERLAY-PEERS:
       type: evpn
       update_source: Loopback0
@@ -19,13 +24,22 @@ router_bgp:
       next_hop_unchanged: true
   address_family_ipv4:
     peer_groups:
+      IPv4-UNDERLAY-PEERS:
+        activate: true
       EVPN-OVERLAY-PEERS:
         activate: false
-  address_family_evpn:
-    peer_groups:
-      EVPN-OVERLAY-PEERS:
-        activate: true
+  redistribute_routes:
+    connected:
+      route_map: RM-CONN-2-BGP
   neighbors:
+    172.31.255.1:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: 65101
+      description: EMEA_NORTH_01_LEAF1A_Ethernet1
+    172.31.255.9:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: 65101
+      description: EMEA_NORTH_01_LEAF1B_Ethernet1
     192.168.255.5:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_LEAF1A
@@ -34,14 +48,10 @@ router_bgp:
       peer_group: EVPN-OVERLAY-PEERS
       description: EMEA_NORTH_01_LEAF1B
       remote_as: 65101
-    192.168.255.7:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: EMEA_NORTH_01_LEAF2A
-      remote_as: 65102
-    192.168.255.8:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: EMEA_NORTH_01_LEAF2B
-      remote_as: 65102
+  address_family_evpn:
+    peer_groups:
+      EVPN-OVERLAY-PEERS:
+        activate: true
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 192.168.0.0/24
@@ -69,10 +79,10 @@ local_users:
     privilege: 15
     role: network-admin
     no_password: true
-  alumne:
+  automation:
     privilege: 15
     role: network-admin
-    sha512_password: < Provide SHA512 HASH for password >
+    sha512_password: $6$GwtJUZjzqON23NQs$YLoJ4U5AkfF4MrN8Qdh9neGnRjXRsGCJeEUQHXreYSCGmNa7QVH1l/hU838ZewmZ0C.fdc3afOYHaCL6LaYkc0
 vrfs:
   MGMT:
     ip_routing: false
@@ -81,7 +91,7 @@ management_interfaces:
     description: oob_management
     shutdown: false
     vrf: MGMT
-    ip_address: 192.168.0.10/24
+    ip_address: 172.16.77.21/24
     gateway: 192.168.0.1
     type: oob
 management_api_http:
@@ -93,64 +103,37 @@ loopback_interfaces:
     description: EVPN_Overlay_Peering
     shutdown: false
     ip_address: 192.168.255.1/32
-    ospf_area: 0.0.0.0
 ethernet_interfaces:
-  Ethernet2:
+  Ethernet1:
     peer: EMEA_NORTH_01_LEAF1A
-    peer_interface: Ethernet2
+    peer_interface: Ethernet1
     peer_type: l3leaf
-    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF1A_Ethernet2
-    mtu: 1500
+    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF1A_Ethernet1
+    mtu: 1400
     type: routed
     shutdown: false
-    ip_address: 172.31.250.0/31
-    ospf_network_point_to_point: true
-    ospf_area: 0.0.0.0
-  Ethernet3:
+    ip_address: 172.31.255.0/31
+  Ethernet2:
     peer: EMEA_NORTH_01_LEAF1B
-    peer_interface: Ethernet2
+    peer_interface: Ethernet1
     peer_type: l3leaf
-    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF1B_Ethernet2
-    mtu: 1500
+    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF1B_Ethernet1
+    mtu: 1400
     type: routed
     shutdown: false
-    ip_address: 172.31.250.8/31
-    ospf_network_point_to_point: true
-    ospf_area: 0.0.0.0
-  Ethernet4:
-    peer: EMEA_NORTH_01_LEAF2A
-    peer_interface: Ethernet2
-    peer_type: l3leaf
-    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF2A_Ethernet2
-    mtu: 1500
-    type: routed
-    shutdown: false
-    ip_address: 172.31.250.16/31
-    ospf_network_point_to_point: true
-    ospf_area: 0.0.0.0
-  Ethernet5:
-    peer: EMEA_NORTH_01_LEAF2B
-    peer_interface: Ethernet2
-    peer_type: l3leaf
-    description: P2P_LINK_TO_EMEA_NORTH_01_LEAF2B_Ethernet2
-    mtu: 1500
-    type: routed
-    shutdown: false
-    ip_address: 172.31.250.24/31
-    ospf_network_point_to_point: true
-    ospf_area: 0.0.0.0
-router_ospf:
-  process_ids:
-    100:
-      passive_interface_default: true
-      router_id: 192.168.255.1
-      no_passive_interfaces:
-      - Ethernet2
-      - Ethernet3
-      - Ethernet4
-      - Ethernet5
-      bfd_enable: true
-      max_lsa: 12000
+    ip_address: 172.31.255.8/31
+prefix_lists:
+  PL-LOOPBACKS-EVPN-OVERLAY:
+    sequence_numbers:
+      10:
+        action: permit 192.168.255.0/24 eq 32
+route_maps:
+  RM-CONN-2-BGP:
+    sequence_numbers:
+      10:
+        type: permit
+        match:
+        - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 router_bfd:
   multihop:
     interval: 1200

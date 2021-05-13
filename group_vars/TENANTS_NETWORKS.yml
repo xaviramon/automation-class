@@ -3,7 +3,7 @@
 # SVI profiles
 svi_profiles:
   PXE_DEPLOY:
-    mtu: 9000
+    mtu: 1300
     enabled: true
     igmp_snooping_enabled: false
     ip_helpers:
@@ -28,7 +28,7 @@ tenants:
             tags: [opzone,erp1]
             enabled: true
             ip_address_virtual: 10.1.10.1/24
-            mtu: 9000
+            mtu: 1000
             profile: PXE_DEPLOY
           111:
             vni_override: 50111
