@@ -1,0 +1,14 @@
+---
+- name: Validate Fabric configuration
+  hosts: [EMEA]
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.avd
+
+  tasks:
+
+    - name: build local folders
+      tags: [validate]
+      import_role:
+        name: arista.avd.eos_validate_state
